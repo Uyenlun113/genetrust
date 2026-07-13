@@ -294,13 +294,18 @@ const Header: React.FC<{ isTransparent: boolean }> = ({ isTransparent: propIsTra
                     alt="Genetrust Logo"
                     className="h-10 lg:h-16 object-contain flex-shrink-0"
                   />
-                  <div className="hidden sm:flex flex-col border-l border-gray-300 pl-2 lg:pl-3 leading-none flex-shrink-0 whitespace-nowrap">
-                    <span className="text-[12px] lg:text-[14px] font-extrabold tracking-wider text-blue-900">
-                      GENETRUST
-                    </span>
-                    <span className="text-[9px] lg:text-[10px] uppercase font-semibold tracking-widest mt-0.5 text-blue-600">
-                      Y học di truyền
-                    </span>
+                  <div className="hidden sm:flex flex-col items-center border-l border-gray-300 pl-2 lg:pl-3 leading-none flex-shrink-0 whitespace-nowrap">
+                    <div className="text-[17px] lg:text-[23px] font-extrabold tracking-tight">
+                      <span className="text-[#0D47A1]">Gene</span>
+                      <span className="text-[#0891B2]">trust</span>
+                    </div>
+                    <div className="flex items-center space-x-1.5 mt-0.5 justify-center">
+                      <span className="w-2 lg:w-3.5 h-[1px] bg-gray-300"></span>
+                      <span className="text-[8.5px] lg:text-[11px] font-medium tracking-tight text-[#0D47A1]/80">
+                        A trusted partner in Genomics
+                      </span>
+                      <span className="w-2 lg:w-3.5 h-[1px] bg-gray-300"></span>
+                    </div>
                   </div>
                 </Link>
               </div>
