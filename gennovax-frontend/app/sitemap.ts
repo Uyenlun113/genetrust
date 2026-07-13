@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { patauArticle } from "@/data/articals";
 import { medicalDocs } from "@/data/medicalDocs";
 import { absoluteUrl } from "@/lib/seo";
-
+export const dynamic = "force-static";
 function parseArticleDate(value: string) {
   const match = value.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
   if (!match) return new Date();
