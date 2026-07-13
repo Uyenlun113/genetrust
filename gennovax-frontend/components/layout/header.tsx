@@ -288,7 +288,7 @@ const Header: React.FC<{ isTransparent: boolean }> = ({ isTransparent: propIsTra
             {/* --- Logo Area --- */}
             <div className="flex items-center space-x-2 lg:space-x-4">
               <div className="flex items-center">
-                <Link href="/" className="logo-shiner flex items-center space-x-2 lg:space-x-3 flex-shrink-0">
+                <Link href="/" className="flex items-center space-x-2 lg:space-x-3 flex-shrink-0">
                   <img
                     src="/images/genetrust-logo.png"
                     alt="Genetrust Logo"
