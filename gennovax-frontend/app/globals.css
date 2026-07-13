@@ -1,0 +1,191 @@
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap");
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #132238;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: "Manrope", sans-serif;
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+html,
+body {
+  scroll-behavior: smooth !important;
+}
+
+body {
+  background:
+    radial-gradient(circle at top, rgba(127, 205, 255, 0.18), transparent 28%),
+    linear-gradient(180deg, #f9fdff 0%, #f4f9fc 46%, #ffffff 100%);
+  color: var(--foreground);
+  font-family: "Manrope", sans-serif;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(14, 116, 144, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(14, 116, 144, 0.03) 1px, transparent 1px);
+  background-size: 24px 24px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.2), transparent 28%);
+  z-index: -1;
+}
+
+::selection {
+  background: rgba(14, 116, 144, 0.18);
+  color: #082032;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #edf5fa;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #99cde8, #5ca8d3);
+  border: 2px solid #edf5fa;
+  border-radius: 999px;
+}
+
+@keyframes scroll-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes scroll-right {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.animate-scroll-left {
+  animation: scroll-left 40s linear infinite;
+}
+
+.animate-scroll-right {
+  animation: scroll-right 40s linear infinite;
+}
+
+.bg-scale {
+  position: relative;
+  overflow: hidden;
+}
+
+.bg-scale::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: var(--bg-url);
+  transform: scale(1);
+  animation: bgScaleAnim 8s ease-in-out infinite;
+  z-index: -1;
+}
+
+@keyframes bgScaleAnim {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes logo-shiner-sweep {
+  0% {
+    background-position: 155% 50%;
+  }
+  100% {
+    background-position: -55% 50%;
+  }
+}
+
+.logo-shiner {
+  --logo-shiner-mask: url("/images/genetrust-logo.png");
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.logo-shiner > img {
+  position: relative;
+  z-index: 0;
+}
+
+.logo-shiner::before,
+.logo-shiner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-repeat: no-repeat;
+  background-size: 260% 100%;
+  mask-image: var(--logo-shiner-mask);
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+  -webkit-mask-image: var(--logo-shiner-mask);
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  animation: logo-shiner-sweep 4.5s ease-in-out infinite alternate;
+}
+
+.logo-shiner::before {
+  background-image: linear-gradient(
+    105deg,
+    transparent 34%,
+    rgba(34, 211, 238, 0.16) 42%,
+    rgba(255, 255, 255, 0.85) 49%,
+    rgba(34, 211, 238, 0.72) 54%,
+    rgba(59, 130, 246, 0.24) 62%,
+    transparent 72%
+  );
+  filter: blur(1.4px) brightness(1.25) saturate(1.18);
+  opacity: 0.95;
+  transform: scale(1.035);
+}
+
+.logo-shiner::after {
+  background-image: linear-gradient(
+    105deg,
+    transparent 45%,
+    rgba(255, 255, 255, 0.95) 49%,
+    rgba(255, 255, 255, 0.95) 51%,
+    transparent 56%
+  );
+  filter: drop-shadow(0 0 7px rgba(255, 255, 255, 0.95))
+    drop-shadow(0 0 13px rgba(34, 211, 238, 0.78));
+  opacity: 0.9;
+}

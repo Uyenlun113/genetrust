@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-roboto);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-roboto), "Roboto", "Segoe UI", sans-serif;
+}
+
+@keyframes history-drawer-backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes history-drawer-slide-in {
+  from {
+    opacity: 0.96;
+    transform: translate3d(44px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.history-drawer-backdrop {
+  animation: history-drawer-backdrop-in 600ms ease-out both;
+}
+
+.history-drawer-panel {
+  animation: history-drawer-slide-in 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
