@@ -10,7 +10,7 @@ const HeroSection: React.FC = () => {
       <video
         ref={videoRef}
         className=" w-full object-cover aspect-[16/10] lg:aspect-[16/8]"
-        src="/videos/introduct.mp4"
+        src="/videos/video_banner.mp4"
         autoPlay
         loop
         muted
