@@ -27,7 +27,7 @@ const serviceData: Service[] = [
     description:
       "Kết nối trực tiếp với chuyên gia để giải mã gen, tư vấn chuyên sâu và xây dựng kế hoạch sức khỏe.",
     imageUrl:
-      "https://res.cloudinary.com/da6f4dmql/image/upload/v1764730192/dl.beatsnoop.com-3000-O9KATiVLbI_bf17z3.jpg",
+      "/images/anh7.png",
     icon: PeopleFill,
     href: "/gioi-thieu#doi-ngu-va-thanh-tuu",
   },
@@ -36,7 +36,7 @@ const serviceData: Service[] = [
     title: "Chăm sóc thai kỳ",
     description: "Sàng lọc, chẩn đoán, trước, trong và sau khi mang thai.",
     imageUrl:
-      "https://res.cloudinary.com/da6f4dmql/image/upload/v1764742688/gen-h-z7287822248537_47046515784e5e419d59740b0d1edc4d_y0x2mk.jpg",
+      "/images/anh6.png",
     icon: BriefcaseFill,
     href: "/services/corporate-solutions",
   },

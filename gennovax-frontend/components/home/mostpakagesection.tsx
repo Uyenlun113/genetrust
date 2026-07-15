@@ -24,7 +24,7 @@ const popularPackagesData: PackageDetails[] = [
     description:
       "Sử dụng 01 mẫu máu mẹ và 01 mẫu bất kỳ của cha (móng tay, tóc, bàn chải...). Áp dụng cho thai từ 7 tuần. Độ chính xác: 99,9999%. Bảo mật tuyệt đối. Trả kết quả sau 3-5 ngày làm việc.",
     mainImageUrl:
-      "https://res.cloudinary.com/da6f4dmql/image/upload/v1764579968/500087657_122108016806870117_710668953486729298_n_wmcxfk.jpg",
+      "/images/anh1.png",
     smallLogoUrl: "/images/genetrust-logo.png",
     linkto: "/dich-vu/DNA",
   },
@@ -36,7 +36,7 @@ const popularPackagesData: PackageDetails[] = [
     description:
       "Phát hiện lệch bội 3 cặp NST (13, 18, 21) và 5 hội chứng NST giới tính (Turner, Tam nhiễm X, Klinefelter, Jacobs, XXXY). Dành cho thai đơn từ 9 tuần. Kết quả có từ sau 3-5 ngày làm việc.",
     mainImageUrl:
-      "https://res.cloudinary.com/da6f4dmql/image/upload/v1764579968/496506308_122100963794870117_1449912006591196456_n_j34mr5.jpg",
+      "images/anh4.png",
     smallLogoUrl: "/images/genetrust-logo.png",
     linkto: "/dich-vu/NIPT",
   },
@@ -47,7 +47,7 @@ const popularPackagesData: PackageDetails[] = [
     description:
       "Phục vụ thủ tục pháp lý: nhập tịch, định cư nước ngoài... (Dành cho 2 mẫu/1 kết quả). Dùng cho các thủ tục như làm khai sinh, nhận cha/mẹ/con. Độ chính xác cao 99,9999%. Thời gian trả kết quả: 1-2 ngày làm việc.",
     mainImageUrl:
-      "https://res.cloudinary.com/da6f4dmql/image/upload/v1764579968/496942572_122098102940870117_1791812201739354939_n_efjixl.jpg",
+      "/images/anh3.png",
     smallLogoUrl: "/images/genetrust-logo.png",
     linkto: "/dich-vu/DNA",
   },
@@ -59,7 +59,7 @@ const popularPackagesData: PackageDetails[] = [
     description:
       "Phát hiện lệch bội toàn bộ 22 cặp NST thường và 5 hội chứng giới tính: Turner (XO), tam nhiễm X (XXX), Klinefelter (XXY), Klinefelter mở rộng (XXXY), Jacobs (XYY). Áp dụng cho thai đơn từ 9 tuần. Thời gian trả kết quả: 3-5 ngày làm việc.",
     mainImageUrl:
-      "https://res.cloudinary.com/da6f4dmql/image/upload/v1764579968/571157271_122148617522870117_6835087446376933824_n_tbex8y.jpg",
+      "/images/anh5.png",
     smallLogoUrl: "/images/genetrust-logo.png",
     linkto: "/dich-vu/NIPT",
   },

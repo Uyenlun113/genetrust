@@ -54,7 +54,7 @@ export default function PopupBanner() {
       >
         {/* Ảnh banner */}
         <img
-          src="https://res.cloudinary.com/da6f4dmql/image/upload/v1765252888/500171538_122109065432870117_5679422188234481001_n_laiiez.jpg"
+          src="/images/anh2.png"
           alt="Banner popup"
           className="w-full aspect-[2/2] md:aspect-[2/2] object-cover block"
         />
