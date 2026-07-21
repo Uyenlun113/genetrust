@@ -29,7 +29,7 @@ export default function GenetrustDnaService() {
       <div className="py-0 bg-gray-50">
         {/* Khối 1: Lợi thế & Cam kết (Ảnh web_Artboard 5 copy.png) */}
         <FeatureBlock
-          imageSrc="/images/ADN/Ảnh web_Artboard 5 copy.png"
+          imageSrc="/images/ADN/vuottroi.png"
           imageAlt="Gia đình hạnh phúc"
           title="Lợi thế vượt trội & Cam kết từ Genetrust"
           subtitle="Chính xác 99.9999% - Bảo mật tuyệt đối"
@@ -55,7 +55,7 @@ export default function GenetrustDnaService() {
 
         {/* Khối 2: Xét nghiệm trước sinh (Ảnh web-07.png) */}
         <FeatureBlock
-          imageSrc="/images/ADN/Ảnh web-07.png"
+          imageSrc="/images/ADN/xamlan.png"
           imageAlt="Xét nghiệm ADN trước sinh không xâm lấn"
           title="Xét nghiệm ADN trước sinh không xâm lấn"
           subtitle="Phát hiện huyết thống cha con từ khi là bào thai"
@@ -82,7 +82,7 @@ export default function GenetrustDnaService() {
 
         {/* Khối 3: Uy tín & Pháp lý (Ảnh web-06.png) */}
         <FeatureBlock
-          imageSrc="/images/ADN/Ảnh web-06.png"
+          imageSrc="/images/ADN/uytin.png"
           imageAlt="Genetrust được công nhận pháp lý"
           title="Nền tảng uy tín & Được công nhận pháp lý"
           subtitle="Kết quả được chấp thuận tại các cơ quan hành chính"
@@ -159,7 +159,7 @@ const HeroSection = () => {
     >
       {/* Ảnh nền */}
       <img
-        src="https://res.cloudinary.com/da6f4dmql/image/upload/v1764746810/shutterstock_1802264764_u02kyk.jpg"
+        src="/images/huyetthong.png"
         alt="Xét nghiệm ADN Huyết thống Genetrust"
         className="absolute inset-0 h-full w-full object-cover"
       />
@@ -245,9 +245,8 @@ const FeatureBlock: React.FC<FeatureBlockProps> = ({
 }) => (
   <div className="container mx-auto max-w-6xl px-4 py-16">
     <div
-      className={`flex flex-col items-center gap-12 md:gap-16 lg:gap-24 ${
-        reverse ? "md:flex-row-reverse" : "md:flex-row"
-      }`}
+      className={`flex flex-col items-center gap-12 md:gap-16 lg:gap-24 ${reverse ? "md:flex-row-reverse" : "md:flex-row"
+        }`}
     >
       {/* Cột Ảnh */}
       <div className="w-full md:w-1/2">

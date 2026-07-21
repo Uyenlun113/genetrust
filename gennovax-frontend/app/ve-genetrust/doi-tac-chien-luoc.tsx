@@ -36,7 +36,7 @@ const partnersData = {
 // 2. Thiết Bị & Tiêu Chuẩn Lab
 const equipmentData = {
   image:
-    "https://res.cloudinary.com/da6f4dmql/image/upload/v1765533012/Ho%CC%82%CC%80_so%CC%9B_na%CC%86ng_lu%CC%9B%CC%A3c_Gennovax_5_1_1_sk1rbx.png",
+    "/images/gioithieu-hethongGennovax/anh4.png",
   title: "Phòng Lab Chuẩn Quốc Tế",
   description:
     "Hệ thống phòng Lab được trang bị máy móc hiện đại, tự động và tuân thủ nghiêm ngặt các tiêu chuẩn kiểm soát chất lượng quốc tế.",

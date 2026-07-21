@@ -168,11 +168,6 @@ const Footer: React.FC = () => {
                     value="Số 15, ngõ 5 Hoàng Quốc Việt, Nghĩa Đô, Cầu Giấy, Hà Nội."
                   />
                   <ContactItem
-                    icon={GeoAltFill}
-                    label="Phòng LAB"
-                    value="183 Đường Trường Chinh, Phường Phương Liệt, Hà Nội."
-                  />
-                  <ContactItem
                     icon={TelephoneFill}
                     label="Hotline"
                     value={
@@ -239,7 +234,7 @@ const Footer: React.FC = () => {
                     Mở Google Maps
                   </Link>
                 </div>
- 
+
                 {/* Map: flex-1 để tự giãn đầy card -> chiều cao các card sẽ bằng nhau */}
                 <div className="mt-5 flex-1 overflow-hidden rounded-2xl ring-1 ring-white/10 shadow-sm">
                   <div className="relative h-full min-h-[260px]">

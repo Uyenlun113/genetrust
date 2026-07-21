@@ -118,7 +118,7 @@ MAIN
 ======================= */
 const AboutGenetrust: React.FC = () => {
   const imageUrl =
-    "https://res.cloudinary.com/da6f4dmql/image/upload/v1764750460/shutterstock_1770401555_hmmobk.jpg";
+    "/images/visao.png";
   const revealVariants = {
     hidden: { opacity: 0, y: 96 },
     visible: { opacity: 1, y: 0 },

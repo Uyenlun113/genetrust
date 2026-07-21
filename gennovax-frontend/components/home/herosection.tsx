@@ -9,7 +9,7 @@ const HeroSection: React.FC = () => {
     <section className="relative overflow-hidden bg-black">
       <video
         ref={videoRef}
-        className=" w-full object-cover aspect-[16/10] lg:aspect-[16/8]"
+        className=" w-full object-cover aspect-[16/8] "
         src="/videos/video_banner.mp4"
         autoPlay
         loop

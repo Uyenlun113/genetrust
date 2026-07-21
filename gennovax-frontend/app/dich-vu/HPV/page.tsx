@@ -26,11 +26,11 @@ const getDriveImageUrl = (url: string) => {
 };
 
 const hpvImages = {
-  hero: "https://res.cloudinary.com/da6f4dmql/image/upload/v1764746810/shutterstock_1802264764_u02kyk.jpg",
+  hero: "/images/huyetthong.png",
   intro: "https://res.cloudinary.com/da6f4dmql/image/upload/v1777954372/HPV_Awareness_Day_1_zac4ft.png",
   target: "https://res.cloudinary.com/da6f4dmql/image/upload/v1777954478/FB_NIPT_-_ADN_4_kscoff.png",
   why: "https://res.cloudinary.com/da6f4dmql/image/upload/v1777954566/HPV_Awareness_Day_p285qh.png",
-  process:"https://res.cloudinary.com/da6f4dmql/image/upload/v1777954717/T%E1%BB%9D_r%C6%A1i_HPV_A4.pdf_u9q1gj.png",
+  process: "https://res.cloudinary.com/da6f4dmql/image/upload/v1777954717/T%E1%BB%9D_r%C6%A1i_HPV_A4.pdf_u9q1gj.png",
 };
 
 const pricingData = [

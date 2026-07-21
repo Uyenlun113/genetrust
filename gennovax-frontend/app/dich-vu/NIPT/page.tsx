@@ -141,7 +141,7 @@ const HeroSection = () => {
     >
       {/* Ảnh nền */}
       <img
-        src="https://res.cloudinary.com/da6f4dmql/image/upload/v1764746810/shutterstock_1802264764_u02kyk.jpg"
+        src="/images/huyetthong.png"
         alt="Xét nghiệm ADN Huyết thống Genetrust"
         className="absolute inset-0 h-full w-full object-cover"
       />

@@ -11,7 +11,7 @@ export const metadata: Metadata = seoMetadata({
     "Dịch vụ xét nghiệm NIPT Geni tại Genetrust giúp sàng lọc nguy cơ bất thường nhiễm sắc thể thai nhi an toàn, không xâm lấn.",
   path: "/dich-vu/NIPT",
   image:
-    "https://res.cloudinary.com/da6f4dmql/image/upload/v1764746810/shutterstock_1802264764_u02kyk.jpg",
+    "/images/huyetthong.png",
   keywords: [
     "xét nghiệm NIPT",
     "sàng lọc trước sinh",

@@ -11,7 +11,7 @@ export const metadata: Metadata = seoMetadata({
     "Dịch vụ xét nghiệm HPV, Cell Prep và các gói tầm soát nguy cơ ung thư cổ tử cung tại Genetrust.",
   path: "/dich-vu/HPV",
   image:
-    "https://res.cloudinary.com/da6f4dmql/image/upload/v1764746810/shutterstock_1802264764_u02kyk.jpg",
+    "/images/huyetthong.png",
   keywords: [
     "xét nghiệm HPV",
     "tầm soát ung thư cổ tử cung",

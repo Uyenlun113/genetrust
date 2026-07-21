@@ -22,7 +22,7 @@ import {
 // 1. Năng Lực Cốt Lõi
 const capacityData = {
   image:
-    "https://res.cloudinary.com/da6f4dmql/image/upload/v1764742688/gen-h-z7287822248537_47046515784e5e419d59740b0d1edc4d_y0x2mk.jpg",
+    "/images/gioithieu-hethongGennovax/anh1.jpg",
   title: "Năng Lực Cốt Lõi",
   description:
     "Genetrust xây dựng nền tảng vững chắc từ nhân sự chuyên môn cao đến hệ thống trang thiết bị hiện đại, đảm bảo năng lực xử lý khối lượng mẫu lớn mỗi ngày.",
@@ -58,7 +58,7 @@ const networkData = {
 // 3. Hệ Thống Xét Nghiệm
 const servicesData = {
   image:
-    "https://res.cloudinary.com/da6f4dmql/image/upload/v1765532716/Ho%CC%82%CC%80_so%CC%9B_na%CC%86ng_lu%CC%9B%CC%A3c_Gennovax_11_1_1_fygn6v.png",
+    "/images/gioithieu-hethongGennovax/anh3.png",
   title: "Hệ Thống Xét Nghiệm Đa Dạng",
   description:
     "Chúng tôi cung cấp một hệ sinh thái xét nghiệm gen toàn diện, đáp ứng mọi nhu cầu sàng lọc và chẩn đoán y học chính xác.",
