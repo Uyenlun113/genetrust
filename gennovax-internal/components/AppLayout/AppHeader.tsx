@@ -217,22 +217,10 @@ export default function AppHeader() {
           >
             <div className="flex items-center">
               <img
-                src="https://res.cloudinary.com/da6f4dmql/image/upload/v1773128350/genbio1-1_hf0tjp.png"
+                src="/Logo Genetrust-08.png"
                 alt="Gen Solutions Logo"
-                className="h-6 object-contain transition duration-300 group-hover:-translate-y-0.5 lg:h-14"
+                className="h-32 w-auto object-contain transition duration-300 group-hover:-translate-y-0.5 lg:h-44 -my-6 lg:-my-10"
               />
-            </div>
-
-            <div className="mb-1 flex flex-col items-start leading-tight">
-              <img
-                src="/genbio1-2.png"
-                alt="GENNOVAX Logo"
-                className="h-4 w-auto object-contain opacity-90 transition-all lg:h-7"
-              />
-
-              <span className="text-[9px] font-bold text-blue-800 transition-colors lg:text-[14px]">
-                Đích đến của niềm tin
-              </span>
             </div>
           </div>
 

@@ -108,7 +108,7 @@ export default function LoginPage() {
         >
           <div className="mb-8">
             <h1 className="text-3xl font-semibold tracking-tight text-white text-center" >
-              TRANG QUẢN TRỊ GENNOVAX
+              TRANG QUẢN TRỊ GENETRUST
             </h1>
           </div>
 

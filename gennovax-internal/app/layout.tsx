@@ -11,8 +11,8 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: "Trang quản trị GennovaX",
-  description: "Gennovax-managerment",
+  title: "Trang quản trị Genetrust",
+  description: "Genetrust-managerment",
 };
 
 export default function RootLayout({
