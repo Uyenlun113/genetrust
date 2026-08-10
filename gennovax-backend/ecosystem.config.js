@@ -6,7 +6,7 @@ module.exports = {
       env: {
         SECRET_KEY: 'kien0190902',
         NODE_ENV: 'production',
-        PORT: 5002,
+        PORT: 5005,
       },
     },
   ],
