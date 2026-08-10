@@ -89,13 +89,21 @@ function clearAuthAndRedirect() {
 
 async function parseJsonResponse<T>(res: Response): Promise<T> {
   if (!res.ok) {
+    const text = await res.text().catch(() => "");
+    let errorMessage = text || `HTTP ${res.status}`;
+    try {
+      const json = JSON.parse(text);
+      if (json?.message) errorMessage = json.message;
+    } catch {}
+
     if (res.status === 401) {
       clearAuthAndRedirect();
-      throw new Error("Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại.");
+      if (!text || text.trim() === "Unauthorized") {
+        errorMessage = "Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại.";
+      }
     }
 
-    const text = await res.text().catch(() => "");
-    throw new Error(text || `HTTP ${res.status}`);
+    throw new Error(errorMessage);
   }
 
   return res.json() as Promise<T>;

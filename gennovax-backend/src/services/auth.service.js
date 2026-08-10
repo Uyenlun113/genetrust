@@ -22,8 +22,12 @@ function getBearerToken(headers = {}) {
 }
 
 export async function login(body = {}) {
-  const { email, password } = body;
-  const user = await User.findOne({ email, isActive: true });
+  const email = String(body.email || '').trim();
+  const password = String(body.password || '');
+  const user = await User.findOne({
+    email: { $regex: new RegExp(`^${email}$`, 'i') },
+    isActive: true,
+  });
   if (!user) throw createHttpError(401, 'Sai email hoặc mật khẩu.');
 
   const ok = await bcrypt.compare(password, user.passwordHash);
