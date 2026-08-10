@@ -1,6 +1,6 @@
-import Minio from 'minio';
+import { Client } from 'minio';
 
-const minioClient = new Minio.Client({
+const minioClient = new Client({
   endPoint: 'minio-server',
   port: 9000,
   useSSL: false,
