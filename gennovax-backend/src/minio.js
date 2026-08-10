@@ -1,4 +1,4 @@
-const Minio = require('minio');
+import Minio from 'minio';
 
 const minioClient = new Minio.Client({
   endPoint: 'minio-server',
@@ -49,4 +49,4 @@ async function initMinioBucket() {
 // Chạy hàm này ngay khi file được import
 // initMinioBucket();
 
-module.exports = minioClient;
+export default minioClient;
