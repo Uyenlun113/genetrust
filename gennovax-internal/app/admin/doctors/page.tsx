@@ -335,7 +335,7 @@ export default function AdminDoctorsPage() {
                           <div className="flex items-center justify-end gap-2">
                             <button
                               onClick={() =>
-                                router.push(`/admin/doctors/${doctor._id}`, {
+                                router.push(`/admin/doctors/detail?id=${doctor._id}`, {
                                   scroll: true,
                                 })
                               }

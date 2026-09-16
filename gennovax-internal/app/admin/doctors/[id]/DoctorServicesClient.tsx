@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 import LoadingOverlay from "@/components/share/LoadingOverlay";
@@ -36,10 +36,14 @@ function formatCurrency(value: number) {
 
 export default function DoctorServicesClient() {
   const params = useParams<{ id: string }>();
+  const searchParams = useSearchParams();
   const router = useRouter();
   const { user, canManageClinics } = useAuth();
 
-  const doctorId = String(params?.id || "");
+  const doctorId = useMemo(() => {
+    if (params?.id && params.id !== "placeholder") return params.id;
+    return searchParams?.get("id") || "";
+  }, [params, searchParams]);
 
   const [doctor, setDoctor] = useState<DoctorItem | null>(null);
   const [rows, setRows] = useState<DoctorCatalogServiceRow[]>([]);
