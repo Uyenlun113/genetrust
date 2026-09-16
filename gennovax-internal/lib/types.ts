@@ -43,6 +43,8 @@ export type CatalogServiceItem = {
   name: string;
   serviceType: ServiceType;
   turnaroundHours: number;
+  listPrice?: number;
+  costPrice?: number;
   note?: string;
   isActive: boolean;
 };
@@ -56,6 +58,7 @@ export type DoctorCatalogServiceRow = {
   note?: string;
   isGlobalActive: boolean;
   isConfigured: boolean;
+  costPrice?: number;
   listPrice: number;
   netPrice: number;
 };

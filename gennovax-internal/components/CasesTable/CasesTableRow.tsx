@@ -238,6 +238,19 @@ export default function CasesTableRow({
         </div>
       </td>
 
+      {/* 18. Giá gốc (tự động theo sản phẩm) */}
+      <td className={`${tdBase} text-right font-semibold tabular-nums text-amber-800`}>
+        {(row.costPrice ?? 0).toLocaleString()}
+      </td>
+
+      {/* 19. Lợi nhuận dự kiến (Tiền thu - Phí xử lý mẫu - Giá gốc) */}
+      <td className={`${tdBase} text-right font-bold tabular-nums text-emerald-700`}>
+        {(
+          (row.collectedAmount || 0) -
+          ((row.shippingFee || 0) + (row.costPrice || 0))
+        ).toLocaleString()}
+      </td>
+
       {/* 18. Mẫu chuyển lab */}
       <td className={tdBase}>
         <div className="text-slate-700">{row.transferStatus || "—"}</div>
@@ -345,23 +358,6 @@ export default function CasesTableRow({
       {isAccountingAdmin && (
         <td className="whitespace-nowrap border-r border-slate-200/80 px-3 py-3 text-center align-middle text-[12px] font-bold tabular-nums text-sky-800">
           {(row.receivedAmount ?? 0).toLocaleString()}
-        </td>
-      )}
-      {isAccountingAdmin && (
-        <td
-          className={`whitespace-nowrap border-r border-slate-200/80 px-3 py-3 text-center align-middle text-[12px] font-bold tabular-nums text-amber-800`}
-        >
-          {(row.costPrice ?? 0).toLocaleString()}
-        </td>
-      )}
-      {isAccountingAdmin && (
-        <td
-          className={`whitespace-nowrap border-r border-slate-200/80 px-3 py-3 text-center align-middle text-[12px] font-bold tabular-nums text-rose-600`}
-        >
-          {(
-            (row.collectedAmount || 0) -
-            ((row.costPrice || 0) + (row.shippingFee || 0))
-          ).toLocaleString()}
         </td>
       )}
 

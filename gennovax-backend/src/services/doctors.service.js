@@ -535,6 +535,7 @@ export async function listDoctorServices(req) {
       note: service.note || '',
       isGlobalActive: service.isActive !== false,
       isConfigured: !!configured && configured.isActive !== false,
+      costPrice: Number(service.costPrice || 0),
       listPrice: Number(configured?.listPrice || 0),
       netPrice: Number(configured?.netPrice || 0),
     };

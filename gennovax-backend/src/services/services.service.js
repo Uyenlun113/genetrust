@@ -41,6 +41,8 @@ export async function createService(body = {}) {
     name: String(body?.name || '').trim(),
     serviceType: body?.serviceType,
     turnaroundHours: Number(body?.turnaroundHours ?? 48),
+    listPrice: Number(body?.listPrice ?? 0),
+    costPrice: Number(body?.costPrice ?? 0),
     note: String(body?.note || '').trim(),
     isActive: body?.isActive !== false,
   };
@@ -61,6 +63,8 @@ export async function updateService(id, body = {}) {
   if ('turnaroundHours' in body) {
     patch.turnaroundHours = Number(body.turnaroundHours ?? 48);
   }
+  if ('listPrice' in body) patch.listPrice = Number(body.listPrice ?? 0);
+  if ('costPrice' in body) patch.costPrice = Number(body.costPrice ?? 0);
   if ('note' in body) patch.note = String(body.note || '').trim();
   if ('isActive' in body) patch.isActive = body.isActive !== false;
 

@@ -269,6 +269,7 @@ export default function DoctorServicesClient() {
                   <th className="px-4 py-4">Mã DV</th>
                   <th className="px-4 py-4">Tên dịch vụ</th>
                   <th className="px-4 py-4 text-center">TAT</th>
+                  <th className="px-4 py-4 text-right">Giá gốc</th>
                   <th className="px-4 py-4">Giá niêm yết</th>
                   <th className="px-4 py-4">Giá thu về</th>
                   <th className="px-4 py-4 text-right">Thao tác</th>
@@ -278,7 +279,7 @@ export default function DoctorServicesClient() {
                 {filteredRows.length === 0 ? (
                   <tr>
                     <td
-                      colSpan={9}
+                      colSpan={10}
                       className="px-6 py-12 text-center text-sm text-slate-400"
                     >
                       Không có dịch vụ phù hợp với bộ lọc hiện tại.
@@ -337,6 +338,9 @@ export default function DoctorServicesClient() {
                         </td>
                         <td className="px-4 py-4 text-center">
                           {row.turnaroundHours}h
+                        </td>
+                        <td className="px-4 py-4 text-right font-semibold text-amber-800 tabular-nums">
+                          {formatCurrency(row.costPrice || 0)} đ
                         </td>
                         <td className="px-4 py-4">
                           <div className="space-y-2">

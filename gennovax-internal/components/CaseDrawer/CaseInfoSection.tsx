@@ -228,52 +228,28 @@ export default function CaseInfoSection({
                   </div>
                 </div>
 
-                {isAccountingAdmin && (
-                  <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-                    <div className="rounded-[20px] bg-sky-50/60 p-3 ring-1 ring-sky-100">
-                      <div className="mb-2 text-[11px] font-semibold text-indigo-700">
-                        Tiền đã nhận
-                      </div>
-                      <Input
-                        value={String((form as any).receivedAmount ?? 0)}
-                        onChange={(v) => {
-                          const n =
-                            Number(String(v).replace(/[^\d]/g, "")) || 0;
-                          patchForm({ receivedAmount: n } as any);
-                        }}
-                        placeholder="Nhập số tiền..."
-                        tone="blue"
-                      />
-                      <div className="mt-1 text-[13px] font-bold text-sky-700">
-                        {fmtMoney((form as any).receivedAmount ?? 0)}
-                      </div>
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+                  <div className="rounded-[20px] bg-amber-50/70 p-3 ring-1 ring-amber-200">
+                    <div className="mb-2 text-[11px] font-semibold text-amber-800">
+                      Giá gốc (Tự động theo SP)
                     </div>
-
-                    <div className="rounded-xl bg-rose-50/50 p-3 ring-1 ring-rose-200/50">
-                      <div className="mb-2 text-[11px] font-semibold text-rose-700">
-                        Giá xuất vốn (Cost)
-                      </div>
-                      <Input
-                        value={String((form as any).costPrice ?? 0)}
-                        onChange={(v) => {
-                          const n =
-                            Number(String(v).replace(/[^\d]/g, "")) || 0;
-                          patchForm({ costPrice: n } as any);
-                        }}
-                        placeholder="Nhập giá vốn..."
-                        tone="rose"
-                      />
-                      <div className="mt-1 text-[13px] font-bold text-rose-700">
-                        {fmtMoney((form as any).costPrice ?? 0)}
-                      </div>
+                    <Input
+                      value={fmtMoney((form as any).costPrice ?? 0)}
+                      onChange={(v) => {
+                        const n = parseMoneyInput(v);
+                        patchForm({ costPrice: n } as any);
+                      }}
+                      placeholder="Tự động theo SP..."
+                      tone="rose"
+                    />
+                    <div className="mt-1 text-[12px] font-bold text-amber-800">
+                      {fmtMoney((form as any).costPrice ?? 0)} đ
                     </div>
                   </div>
-                )}
 
-                <div className="mt-3">
                   <div className="rounded-[20px] bg-cyan-50/60 p-3 ring-1 ring-cyan-100">
                     <div className="mb-2 text-[11px] font-semibold text-cyan-700">
-                      Phí vận chuyển
+                      Phí xử lý / Vận chuyển
                     </div>
                     <Input
                       value={fmtMoney((form as any).shippingFee ?? 0)}
@@ -281,14 +257,53 @@ export default function CaseInfoSection({
                         const n = parseMoneyInput(v);
                         patchForm({ shippingFee: n } as any);
                       }}
-                      placeholder="Nhập phí vận chuyển..."
+                      placeholder="Nhập phí xử lý..."
                       tone="sky"
                     />
-                    <div className="mt-1 text-[13px] font-bold text-cyan-700">
-                      {fmtMoney((form as any).shippingFee ?? 0)}
+                    <div className="mt-1 text-[12px] font-bold text-cyan-700">
+                      {fmtMoney((form as any).shippingFee ?? 0)} đ
                     </div>
                   </div>
                 </div>
+
+                <div className="rounded-[20px] bg-emerald-50 p-3.5 ring-1 ring-emerald-200">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[12px] font-bold text-emerald-800">
+                      Lợi nhuận dự kiến
+                    </span>
+                    <span className="text-[10px] text-emerald-600">
+                      = Tiền thu - Phí xử lý - Giá gốc
+                    </span>
+                  </div>
+                  <div className="mt-1 text-[16px] font-black tabular-nums text-emerald-700">
+                    {fmtMoney(
+                      (form.collectedAmount || 0) -
+                        ((form.shippingFee || 0) + (form.costPrice || 0)),
+                    )}{" "}
+                    đ
+                  </div>
+                </div>
+
+                {isAccountingAdmin && (
+                  <div className="rounded-[20px] bg-sky-50/60 p-3 ring-1 ring-sky-100">
+                    <div className="mb-2 text-[11px] font-semibold text-indigo-700">
+                      Tiền đã nhận thực tế (Kế toán)
+                    </div>
+                    <Input
+                      value={String((form as any).receivedAmount ?? 0)}
+                      onChange={(v) => {
+                        const n =
+                          Number(String(v).replace(/[^\d]/g, "")) || 0;
+                        patchForm({ receivedAmount: n } as any);
+                      }}
+                      placeholder="Nhập số tiền..."
+                      tone="blue"
+                    />
+                    <div className="mt-1 text-[13px] font-bold text-sky-700">
+                      {fmtMoney((form as any).receivedAmount ?? 0)} đ
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </Field>

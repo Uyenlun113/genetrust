@@ -12,6 +12,8 @@ type FormState = {
   name: string;
   serviceType: ServiceType;
   turnaroundHours: string;
+  listPrice: string;
+  costPrice: string;
   note: string;
   isActive: boolean;
 };
@@ -21,6 +23,8 @@ const defaultForm: FormState = {
   name: "",
   serviceType: "ADN",
   turnaroundHours: "48",
+  listPrice: "0",
+  costPrice: "0",
   note: "",
   isActive: true,
 };
@@ -96,6 +100,8 @@ export default function AdminServicesPage() {
       name: item.name,
       serviceType: item.serviceType,
       turnaroundHours: String(item.turnaroundHours ?? 48),
+      listPrice: item.listPrice ? String(item.listPrice) : "0",
+      costPrice: item.costPrice ? String(item.costPrice) : "0",
       note: item.note || "",
       isActive: item.isActive !== false,
     });
@@ -113,6 +119,8 @@ export default function AdminServicesPage() {
         name: form.name.trim(),
         serviceType: form.serviceType,
         turnaroundHours: Number(form.turnaroundHours || 48),
+        listPrice: Number(form.listPrice || 0),
+        costPrice: Number(form.costPrice || 0),
         note: form.note.trim(),
         isActive: form.isActive,
       };
@@ -218,6 +226,7 @@ export default function AdminServicesPage() {
                   <th className="px-4 py-4">Mã DV</th>
                   <th className="px-4 py-4">Tên dịch vụ</th>
                   <th className="px-4 py-4">Nhóm</th>
+                  <th className="px-4 py-4 text-right">Giá gốc</th>
                   <th className="px-4 py-4 text-center">TAT</th>
                   <th className="px-4 py-4 text-center">Trạng thái</th>
                   <th className="px-4 py-4 text-right">Thao tác</th>
@@ -227,7 +236,7 @@ export default function AdminServicesPage() {
                 {filteredItems.length === 0 ? (
                   <tr>
                     <td
-                      colSpan={7}
+                      colSpan={8}
                       className="px-6 py-12 text-center text-sm text-slate-400"
                     >
                       Không có dịch vụ phù hợp.
@@ -264,6 +273,9 @@ export default function AdminServicesPage() {
                         >
                           {item.serviceType}
                         </span>
+                      </td>
+                      <td className="px-4 py-4 text-right font-semibold text-amber-800">
+                        {(item.costPrice || 0).toLocaleString()} đ
                       </td>
                       <td className="px-4 py-4 text-center">
                         {item.turnaroundHours}h
@@ -366,6 +378,17 @@ export default function AdminServicesPage() {
                   setForm((prev) => ({
                     ...prev,
                     turnaroundHours: v.replace(/[^\d]/g, ""),
+                  }))
+                }
+              />
+
+              <Field
+                label="Giá gốc (đ)"
+                value={form.costPrice}
+                onChange={(v) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    costPrice: v.replace(/[^\d]/g, ""),
                   }))
                 }
               />

@@ -190,6 +190,33 @@ export default function CaseDrawer({
     return Number(found?.price || 0);
   }, [availableServicesBySource, form]);
 
+  const suggestedCostPrice = useMemo(() => {
+    if (!form || (!form.serviceCode && !form.serviceId)) return 0;
+
+    if (selectedDoctor && selectedDoctor.servicePrices) {
+      const foundDoctorPrice = selectedDoctor.servicePrices.find(
+        (sp) =>
+          sp.serviceCode === form.serviceCode ||
+          String(sp.serviceId) === String(form.serviceId),
+      );
+      if (foundDoctorPrice && Number(foundDoctorPrice.listPrice || 0) > 0) {
+        return Number(foundDoctorPrice.listPrice);
+      }
+    }
+
+    const foundCatalogService = (services || []).find(
+      (s) =>
+        s.serviceCode === form.serviceCode ||
+        String(s._id) === String(form.serviceId),
+    );
+
+    return Number(
+      (foundCatalogService as any)?.listPrice ||
+        (foundCatalogService as any)?.price ||
+        0,
+    );
+  }, [form, selectedDoctor, services]);
+
   const serviceItemsForSelect = useMemo(() => {
     const baseItems = availableServicesBySource.map(({ service }) => ({
       label: `${service.serviceCode} • ${service.name} `,
@@ -229,6 +256,7 @@ export default function CaseDrawer({
       serviceName: "",
       serviceId: null,
       agentTierLabel: doctor?.agentTierLabel || "",
+      costPrice: 0,
     });
 
     setCollectedAmountManual(false);
@@ -240,10 +268,23 @@ export default function CaseDrawer({
         ({ service }) => service.serviceCode === serviceCode,
       ) ?? null;
 
+    const catalogItem = services.find((s) => s.serviceCode === serviceCode);
+    const doctorPrice = selectedDoctor?.servicePrices?.find(
+      (sp) => sp.serviceCode === serviceCode,
+    );
+    const autoCostUnit = Number(
+      (catalogItem as any)?.costPrice ||
+        doctorPrice?.listPrice ||
+        (catalogItem as any)?.listPrice ||
+        (catalogItem as any)?.price ||
+        0,
+    );
+
     patchForm({
       serviceCode,
-      serviceName: found?.service.name ?? "",
-      serviceId: found?.service._id ?? null,
+      serviceName: found?.service.name ?? catalogItem?.name ?? "",
+      serviceId: found?.service._id ?? catalogItem?._id ?? null,
+      costPrice: autoCostUnit * sampleCount,
     });
 
     setCollectedAmountManual(false);
@@ -266,6 +307,13 @@ export default function CaseDrawer({
         patchForm({ collectedAmount: autoPrice });
       }
     }
+
+    if (suggestedCostPrice > 0) {
+      const autoCost = suggestedCostPrice * sampleCount;
+      if ((form.costPrice ?? 0) !== autoCost) {
+        patchForm({ costPrice: autoCost });
+      }
+    }
   }, [
     collectedAmountManual,
     form,
@@ -274,6 +322,7 @@ export default function CaseDrawer({
     selectedDoctor,
     selectedService,
     suggestedPrice,
+    suggestedCostPrice,
   ]);
 
   useEffect(() => {

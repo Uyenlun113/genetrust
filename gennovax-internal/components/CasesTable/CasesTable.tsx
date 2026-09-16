@@ -58,7 +58,7 @@ export default function CasesTable({
 
   const isAccountingAdmin = user?.role === "accounting_admin";
   const isAdminOrSuper = user?.role === "admin" || user?.role === "super_admin";
-  const colCount = 29 + (isAccountingAdmin ? 6 : 0) + (isAdminOrSuper ? 1 : 0);
+  const colCount = 31 + (isAccountingAdmin ? 4 : 0) + (isAdminOrSuper ? 1 : 0);
 
   const [historyModalOpen, setHistoryModalOpen] = useState(false);
   const [selectedCaseInfo, setSelectedCaseInfo] = useState<{
@@ -216,25 +216,25 @@ export default function CasesTable({
               <col className="w-[130px]" /> {/* 15. Ngày trả kết quả */}
               <col className="w-[120px]" /> {/* 16. Phí xử lý mẫu */}
               <col className="w-[130px]" /> {/* 17. Tiền thu */}
-              <col className="w-[130px]" /> {/* 18. Mẫu chuyển lab */}
-              <col className="w-[130px]" /> {/* 19. Tiếp nhận mẫu */}
-              <col className="w-[130px]" /> {/* 20. Xử lý mẫu */}
-              <col className="w-[120px]" /> {/* 21. Phân tích */}
-              <col className="w-[90px]" />  {/* 22. Lưu trữ */}
-              <col className="w-[90px]" />  {/* 23. GT nhận */}
-              <col className="w-[100px]" /> {/* 24. Trả file mềm */}
-              <col className="w-[100px]" /> {/* 25. Trả file cứng */}
-              <col className="w-[150px]" /> {/* 26. Số CCCD / Hộ chiếu */}
-              <col className="w-[110px]" /> {/* 27. Ngày cấp */}
-              <col className="w-[140px]" /> {/* 28. Nơi cấp */}
-              <col className="w-[180px]" /> {/* 29. Địa chỉ */}
+              <col className="w-[120px]" /> {/* 18. Giá gốc */}
+              <col className="w-[140px]" /> {/* 19. Lợi nhuận dự kiến */}
+              <col className="w-[130px]" /> {/* 20. Mẫu chuyển lab */}
+              <col className="w-[130px]" /> {/* 21. Tiếp nhận mẫu */}
+              <col className="w-[130px]" /> {/* 22. Xử lý mẫu */}
+              <col className="w-[120px]" /> {/* 23. Phân tích */}
+              <col className="w-[90px]" />  {/* 24. Lưu trữ */}
+              <col className="w-[90px]" />  {/* 25. GT nhận */}
+              <col className="w-[100px]" /> {/* 26. Trả file mềm */}
+              <col className="w-[100px]" /> {/* 27. Trả file cứng */}
+              <col className="w-[150px]" /> {/* 28. Số CCCD / Hộ chiếu */}
+              <col className="w-[110px]" /> {/* 29. Ngày cấp */}
+              <col className="w-[140px]" /> {/* 30. Nơi cấp */}
+              <col className="w-[180px]" /> {/* 31. Địa chỉ */}
 
               {isAccountingAdmin && <col className="w-[90px]" />}  {/* Xuất HĐ */}
               {isAccountingAdmin && <col className="w-[90px]" />}  {/* Nhập Cost */}
               {isAccountingAdmin && <col className="w-[100px]" />} {/* Kiểu TT */}
               {isAccountingAdmin && <col className="w-[100px]" />} {/* Đã nhận TT */}
-              {isAccountingAdmin && <col className="w-[110px]" />} {/* Giá cost */}
-              {isAccountingAdmin && <col className="w-[110px]" />} {/* Lợi nhuận */}
               {isAdminOrSuper && <col className="w-[112px]" />}    {/* Hành động */}
             </colgroup>
 
@@ -351,6 +351,12 @@ export default function CasesTable({
                     onChange={(values) => onColumnFilterChange("payment", values)}
                   />
                 </th>
+
+                {/* 18. Giá gốc (Tự động bắt theo danh mục SP) */}
+                <th className={`${thBase} bg-amber-50/90 text-right font-bold text-amber-900`}>Giá gốc</th>
+
+                {/* 19. Lợi nhuận dự kiến (Tiền thu - Phí xử lý - Giá gốc) */}
+                <th className={`${thBase} bg-emerald-50/90 text-right font-bold text-emerald-900`}>Lợi nhuận dự kiến</th>
 
                 {/* 18. Mẫu chuyển lab */}
                 <th className={`${thBase} bg-sky-50`}>Mẫu chuyển lab</th>

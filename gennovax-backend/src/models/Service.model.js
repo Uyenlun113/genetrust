@@ -10,6 +10,8 @@ const ServiceSchema = new mongoose.Schema(
       required: true,
     },
     turnaroundHours: { type: Number, default: 48 },
+    listPrice: { type: Number, default: 0 },
+    costPrice: { type: Number, default: 0 },
     note: { type: String, default: '' },
     isActive: { type: Boolean, default: true },
   },
