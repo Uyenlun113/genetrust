@@ -77,37 +77,36 @@ export default function CasesTableRow({
       onClick={() => onRowClick(row)}
       className={`cursor-pointer transition-all duration-200 ${rowBgClass}`}
     >
+      {/* 1. Pin/Select Icon (Fixed Left 0) */}
       <td
-        className={`sticky left-0 z-0 cursor-cell border-r border-sky-100 px-3 py-3 align-middle transition-colors duration-200 ${sttBgClass}`}
+        className={`sticky left-0 z-20 cursor-cell border-r border-sky-100 px-3 py-3 text-center align-middle transition-colors duration-200 ${sttBgClass} shadow-[1px_0_0_rgba(186,230,253,0.9)]`}
         onClick={(e) => onTogglePin(e, row._id)}
         title="Click để ghim / bỏ ghim dòng này"
       >
-        <div className="relative inline-block w-full text-center">
-          <SttBadge
-            stt={row.stt || index + 1}
-            dueDate={row.dueDate}
-            processStatus={row.processStatus}
-          />
-          {isPinned && (
-            <span className="absolute -right-2 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-sky-500 text-[9px] text-white shadow-sm ring-2 ring-white">
-              ðŸ“Œ
-            </span>
-          )}
-        </div>
+        <span className="text-[12px]">{isPinned ? "📌" : "⚪"}</span>
       </td>
-      <td className={`${tdBase} font-medium text-sky-800`}>
+
+      {/* 2. STT (Fixed Left 56px) */}
+      <td className={`sticky left-[56px] z-20 border-r border-sky-100 px-3 py-3 text-center align-middle transition-colors duration-200 ${sttBgClass} shadow-[1px_0_0_rgba(186,230,253,0.9)]`}>
+        <SttBadge
+          stt={row.stt || index + 1}
+          dueDate={row.dueDate}
+          processStatus={row.processStatus}
+        />
+      </td>
+
+      {/* 3. Ngày (Fixed Left 126px) */}
+      <td className={`sticky left-[126px] z-20 border-r border-sky-100 px-3 py-3 align-middle font-medium text-sky-800 transition-colors duration-200 ${sttBgClass} shadow-[1px_0_0_rgba(186,230,253,0.9)]`}>
         {row.receivedAt
           ? new Date(row.receivedAt).toLocaleDateString("vi-VN")
-          : "—"}
+          : row.date
+            ? new Date(row.date).toLocaleDateString("vi-VN")
+            : "—"}
       </td>
-      <td className={tdBase}>
-        <Pill text={row.processStatus || "—"} tone="slate" />
-      </td>
-      <td className={tdBase}>
-        <MailCell row={row} />
-      </td>
+
+      {/* 4. Mã ca (Fixed Left 236px) */}
       <td
-        className={`${tdBase} whitespace-nowrap font-bold tracking-[0.01em] text-slate-900`}
+        className={`sticky left-[236px] z-20 border-r border-sky-100 px-3 py-3 align-middle whitespace-nowrap font-bold tracking-[0.01em] text-slate-900 transition-colors duration-200 ${sttBgClass} shadow-[1px_0_0_rgba(186,230,253,0.9)]`}
       >
         <div className="flex items-center justify-between gap-2">
           <span className="truncate">{row.caseCode || "—"}</span>
@@ -127,6 +126,197 @@ export default function CasesTableRow({
           )}
         </div>
       </td>
+
+      {/* 5. Họ và tên (Fixed Left 366px) */}
+      <td className={`sticky left-[366px] z-20 border-r border-sky-100 px-3 py-3 align-middle transition-colors duration-200 ${sttBgClass} shadow-[1px_0_0_rgba(186,230,253,0.9)]`}>
+        <div className={`${wrap2} font-semibold text-slate-900`}>
+          {row.patientName || "—"}
+        </div>
+      </td>
+
+      {/* 6. SĐT (Fixed Left 526px) */}
+      <td className={`sticky left-[526px] z-20 border-r border-sky-100 px-3 py-3 align-middle transition-colors duration-200 ${sttBgClass} shadow-[1px_0_0_rgba(186,230,253,0.9)]`}>
+        <div className="font-medium text-slate-700">
+          {row.patientPhone || "—"}
+        </div>
+      </td>
+
+      {/* 7. Lab (Fixed Left 646px) */}
+      <td className={`sticky left-[646px] z-20 border-r border-sky-100 px-3 py-3 align-middle transition-colors duration-200 ${sttBgClass} shadow-[1px_0_0_rgba(186,230,253,0.9)]`}>
+        <div className="font-medium text-slate-700">{row.lab || "—"}</div>
+      </td>
+
+      {/* 8. Dịch vụ (Fixed Left 746px - shadow phân cách) */}
+      <td className={`sticky left-[746px] z-20 border-r border-sky-100 px-3 py-3 align-middle transition-colors duration-200 ${sttBgClass} shadow-[3px_0_8px_-2px_rgba(14,165,233,0.25)]`}>
+        <Pill
+          text={row.serviceType || "—"}
+          tone={
+            row.serviceType === "NIPT"
+              ? "rose"
+              : row.serviceType === "ADN"
+                ? "blue"
+                : normalizeText(row.serviceType || "").includes("sang")
+                  ? "emerald"
+                  : "amber"
+          }
+        />
+      </td>
+
+      {/* 9. Mã hàng */}
+      <td className={tdBase}>
+        <div className="font-semibold text-slate-800">
+          {row.serviceCode || "—"}
+        </div>
+      </td>
+
+      {/* 10. Chi nhánh */}
+      <td className={tdBase}>
+        <div className="text-slate-600">
+          {row.agentTierLabel || row.agentLevel || "—"}
+        </div>
+      </td>
+
+      {/* 11. Nguồn */}
+      <td className={tdBase}>
+        <div className={`${wrap2} text-slate-600`}>{row.source || "—"}</div>
+      </td>
+
+      {/* 12. NVKD phụ trách */}
+      <td className={tdBase}>
+        <div className={`${wrap2} font-medium text-teal-700`}>
+          {row.salesOwner || "—"}
+        </div>
+      </td>
+
+      {/* 13. Ngày gửi mẫu */}
+      <td className={tdBase}>
+        <div className="text-slate-700">
+          {row.sentAt
+            ? new Date(row.sentAt).toLocaleDateString("vi-VN")
+            : "—"}
+        </div>
+      </td>
+
+      {/* 14. ĐH hẹn trả */}
+      <td className={tdBase}>
+        <div className="font-medium text-amber-800">
+          {row.dueDate
+            ? new Date(row.dueDate).toLocaleDateString("vi-VN")
+            : "—"}
+        </div>
+      </td>
+
+      {/* 15. Ngày trả kết quả */}
+      <td className={tdBase}>
+        <div className="font-medium text-emerald-800">
+          {row.returnedAt
+            ? new Date(row.returnedAt).toLocaleDateString("vi-VN")
+            : "—"}
+        </div>
+      </td>
+
+      {/* 16. Phí xử lý mẫu */}
+      <td className={`${tdBase} text-right font-medium tabular-nums text-slate-700`}>
+        {row.shippingFee ? row.shippingFee.toLocaleString() : "0"}
+      </td>
+
+      {/* 17. Tiền thu */}
+      <td className={`${tdBase} text-right font-bold tabular-nums text-sky-800`} onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center justify-between gap-1">
+          <button
+            type="button"
+            className="w-fit cursor-pointer"
+            onClick={(e) => {
+              e.stopPropagation();
+              void onQuickPaidChange(row, !row.paid);
+            }}
+            title={row.paid ? "Đã TT" : "Chưa TT"}
+          >
+            <Check ok={!!row.paid} />
+          </button>
+          <span>{(row.collectedAmount ?? 0).toLocaleString()}</span>
+        </div>
+      </td>
+
+      {/* 18. Mẫu chuyển lab */}
+      <td className={tdBase}>
+        <div className="text-slate-700">{row.transferStatus || "—"}</div>
+      </td>
+
+      {/* 19. Tiếp nhận mẫu */}
+      <td className={tdBase}>
+        <div className="text-slate-700">{row.receiveStatus || "—"}</div>
+      </td>
+
+      {/* 20. Xử lý mẫu */}
+      <td className={tdBase}>
+        <Pill text={row.processStatus || "—"} tone="slate" />
+      </td>
+
+      {/* 21. Phân tích */}
+      <td className={tdBase}>
+        <div className="text-slate-700">{row.feedbackStatus || "—"}</div>
+      </td>
+
+      {/* 22. Lưu trữ */}
+      <td className={`${tdBase} text-center`}>
+        <Pill
+          text={row.softFileDone ? "Đã lưu" : "Chưa"}
+          tone={row.softFileDone ? "emerald" : "slate"}
+        />
+      </td>
+
+      {/* 23. GT nhận */}
+      <td className={`${tdBase} text-center`}>
+        <Pill
+          text={row.gxHardFileReceived || row.gxReceived ? "Đã nhận" : "Chưa"}
+          tone={row.gxHardFileReceived || row.gxReceived ? "emerald" : "slate"}
+        />
+      </td>
+
+      {/* 24. Trả file mềm */}
+      <td className={`${tdBase} text-center`}>
+        <Pill
+          text={row.softFileDone ? "Đã trả" : "Chưa"}
+          tone={row.softFileDone ? "emerald" : "rose"}
+        />
+      </td>
+
+      {/* 25. Trả file cứng */}
+      <td className={`${tdBase} text-center`}>
+        <Pill
+          text={row.hardFileDone ? "Đã trả" : "Chưa"}
+          tone={row.hardFileDone ? "emerald" : "rose"}
+        />
+      </td>
+
+      {/* 26. Số CCCD / Hộ chiếu */}
+      <td className={tdBase}>
+        <div className="font-medium text-slate-800">
+          {row.invoiceIdCard || "—"}
+        </div>
+      </td>
+
+      {/* 27. Ngày cấp */}
+      <td className={tdBase}>
+        <div className="text-slate-700">{row.invoiceIssueDate || "—"}</div>
+      </td>
+
+      {/* 28. Nơi cấp */}
+      <td className={tdBase}>
+        <div className={`${wrap2} text-slate-700`}>
+          {row.invoiceIssuePlace || "—"}
+        </div>
+      </td>
+
+      {/* 29. Địa chỉ */}
+      <td className={tdBase}>
+        <div className={`${wrap2} text-slate-700`}>
+          {row.invoiceAddress || "—"}
+        </div>
+      </td>
+
+      {/* Accounting columns */}
       {isAccountingAdmin && (
         <td className={`${tdBase} text-center`}>
           <div className="flex h-full items-center justify-center">
@@ -147,54 +337,6 @@ export default function CasesTableRow({
           </div>
         </td>
       )}
-      <td className={tdBase}>
-        <div className={`${wrap2} font-semibold text-slate-900`}>
-          {row.patientName || "—"}
-        </div>
-      </td>
-      <td className={tdBase}>
-        <div className={`${wrap2} text-slate-600`}>{row.source || "—"}</div>
-      </td>
-      <td className={tdBase}>
-        <div className={`${wrap2} font-medium text-teal-700`}>
-          {row.salesOwner || "—"}
-        </div>
-      </td>
-      <td className={tdBase}>
-        <Pill
-          text={row.serviceType}
-          tone={
-            row.serviceType === "NIPT"
-              ? "rose"
-              : row.serviceType === "ADN"
-                ? "blue"
-                : normalizeText(row.serviceType).includes("sang")
-                  ? "emerald"
-                  : "amber"
-          }
-        />
-      </td>
-      <td className={tdBase}>
-        <div className={`${wrap2} font-semibold text-slate-800`}>
-          {row.serviceName || "—"}
-        </div>
-        <div className="mt-1 break-words text-[11px] font-medium tracking-[0.03em] text-slate-400">
-          {row.serviceCode || ""}
-        </div>
-      </td>
-      <td className={tdBase} onClick={(e) => e.stopPropagation()}>
-        <button
-          type="button"
-          className="w-fit cursor-pointer"
-          onClick={(e) => {
-            e.stopPropagation();
-            void onQuickPaidChange(row, !row.paid);
-          }}
-          title={row.paid ? "Đã TT" : "Chưa TT"}
-        >
-          <Check ok={!!row.paid} />
-        </button>
-      </td>
       {isAccountingAdmin && (
         <td className="whitespace-nowrap border-r border-slate-200/80 px-3 py-3 text-center align-middle text-[11px] font-semibold tabular-nums text-emerald-700">
           {row.paymentMethod || "Không có"}
@@ -207,21 +349,14 @@ export default function CasesTableRow({
       )}
       {isAccountingAdmin && (
         <td
-          className={`sticky right-[220px] z-10 whitespace-nowrap border-l-2 border-r border-sky-400 px-3 py-3 text-center align-middle text-[12px] font-bold tabular-nums text-amber-800 shadow-[inset_2px_0_0_rgba(56,189,248,0.55),-1px_0_0_rgba(186,230,253,0.9)] ${stickyRightBgClass}`}
+          className={`whitespace-nowrap border-r border-slate-200/80 px-3 py-3 text-center align-middle text-[12px] font-bold tabular-nums text-amber-800`}
         >
           {(row.costPrice ?? 0).toLocaleString()}
         </td>
       )}
-
-      <td
-        className={`${isAccountingAdmin ? `sticky right-[110px] z-10 shadow-[-1px_0_0_rgba(186,230,253,0.9)] ${stickyRightBgClass}` : ""} whitespace-nowrap border-r border-slate-200/80 px-3 py-3 text-center align-middle text-[12px] font-bold tabular-nums text-slate-800`}
-      >
-        {(row.collectedAmount ?? 0).toLocaleString()}
-      </td>
-
       {isAccountingAdmin && (
         <td
-          className={`sticky right-0 z-10 whitespace-nowrap border-r border-slate-200/80 px-3 py-3 text-center align-middle text-[12px] font-bold tabular-nums text-rose-600 shadow-[-1px_0_0_rgba(186,230,253,0.9)] ${stickyRightBgClass}`}
+          className={`whitespace-nowrap border-r border-slate-200/80 px-3 py-3 text-center align-middle text-[12px] font-bold tabular-nums text-rose-600`}
         >
           {(
             (row.collectedAmount || 0) -
@@ -229,8 +364,10 @@ export default function CasesTableRow({
           ).toLocaleString()}
         </td>
       )}
+
+      {/* Admin column */}
       {isAdminOrSuper && (
-        <td className="border-r-0 px-3 py-3 text-center align-middle">
+        <td className={`border-r-0 px-3 py-3 text-center align-middle sticky right-0 z-10 ${stickyRightBgClass} shadow-[-1px_0_0_rgba(186,230,253,0.9)]`}>
           <div className="flex justify-center gap-1.5">
             <button
               className="cursor-pointer whitespace-nowrap rounded-xl bg-sky-600 px-2.5 py-1.5 text-[11px] font-semibold text-white shadow-sm transition hover:bg-sky-500"

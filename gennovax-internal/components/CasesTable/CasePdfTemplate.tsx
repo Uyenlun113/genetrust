@@ -34,7 +34,7 @@ export const CasePdfTemplate = forwardRef<HTMLDivElement, Props>(
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 bg-slate-100 flex items-center justify-center rounded-lg border border-slate-200 overflow-hidden shrink-0">
               <img
-                src="/icon.png"
+                src="/Logo Genetrust-08.png"
                 alt="Logo"
                 className="w-full h-full object-contain"
                 onError={(e) => {

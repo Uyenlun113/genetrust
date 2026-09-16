@@ -93,10 +93,18 @@ app.use(
 
 app.use(express.json({ limit: '2mb' }));
 
-const ALLOWED_ORIGINS = (process.env.CORS_ORIGIN || 'http://localhost:3000')
-  .split(',')
-  .map((s) => s.trim())
-  .filter(Boolean);
+const DEFAULT_ALLOWED_ORIGINS = [
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'https://internal.genetrust.vn',
+  'http://internal.genetrust.vn',
+  'https://genetrust.vn',
+  'http://genetrust.vn',
+];
+
+const ALLOWED_ORIGINS = process.env.CORS_ORIGIN
+  ? process.env.CORS_ORIGIN.split(',').map((s) => s.trim()).filter(Boolean)
+  : DEFAULT_ALLOWED_ORIGINS;
 
 const corsOptions = {
   origin: function (origin, callback) {
