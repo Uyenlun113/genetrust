@@ -123,8 +123,8 @@ export default function CaseWorkflowSection({
             <div className="mt-1 text-[12px] font-bold text-blue-900">
               {(form as any).dueDate
                 ? new Date((form as any).dueDate).toLocaleString("vi-VN", {
-                    timeZone: "Asia/Ho_Chi_Minh",
-                  })
+                  timeZone: "Asia/Ho_Chi_Minh",
+                })
                 : "—"}
             </div>
           </div>
@@ -208,7 +208,7 @@ export default function CaseWorkflowSection({
                     })
                   }
                 />
-                GX nhận file
+                GT nhận file
               </label>
             </div>
 

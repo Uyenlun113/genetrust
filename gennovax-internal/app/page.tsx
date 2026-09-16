@@ -75,7 +75,7 @@ export default function CasesPage() {
     try {
       const trimmedQuery = q.trim();
       const serviceTypeFilter = trimmedQuery ? "ALL" : serviceType;
-      const [opt, list, doc] = await Promise.all([
+      const [opt, list, doc, svcRes] = await Promise.all([
         api.options(),
         api.cases({
           serviceType: serviceTypeFilter,
@@ -92,6 +92,7 @@ export default function CasesPage() {
           payment: columnFilters.payment,
         }),
         api.doctors(""),
+        api.services("", true),
       ]);
 
       if (page > 1 && list.items.length === 0 && list.total > 0) {
@@ -112,22 +113,7 @@ export default function CasesPage() {
       }
 
       setDoctors(doc.items ?? []);
-      setServices(
-        (doc.items ?? []).flatMap((doctor) =>
-          (doctor.servicePrices || [])
-            .filter((service) =>
-              serviceType === "ALL" ? true : service.serviceType === serviceType,
-            )
-            .map((service) => ({
-              _id: service.serviceId,
-              serviceType: service.serviceType,
-              serviceCode: service.serviceCode,
-              name: service.name,
-              turnaroundHours: service.turnaroundHours,
-              isActive: service.isActive !== false,
-            })),
-        ),
-      );
+      setServices(svcRes.items ?? []);
     } finally {
       setLoading(false);
     }

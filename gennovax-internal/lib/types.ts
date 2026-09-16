@@ -23,6 +23,8 @@ export type ServiceItem = {
   name: string;
   turnaroundHours: number;
   isActive: boolean;
+  listPrice?: number;
+  costPrice?: number;
   note?: string;
 };
 

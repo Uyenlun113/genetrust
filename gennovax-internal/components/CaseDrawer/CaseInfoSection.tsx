@@ -159,27 +159,27 @@ export default function CaseInfoSection({
           </div>
 
           <Field label="* Tài chính">
-            <div className="rounded-[24px] border border-sky-100 bg-sky-100 p-4">
-              <div className="mb-2 flex items-center justify-between gap-2">
-                <div className="text-[11px] font-semibold text-sky-700">
-                  Thông tin doanh thu {isAccountingAdmin && "& Giá vốn"}
+            <div className="rounded-[28px] border border-sky-100 bg-[#e0f2fe]/60 p-4">
+              <div className="mb-3 flex items-center justify-between">
+                <div className="text-[13px] font-bold text-[#0369a1]">
+                  Thông tin doanh thu
                 </div>
-                <span className="rounded-full bg-white px-2.5 py-1 text-[11px] font-bold text-sky-700 ring-1 ring-sky-100">
+                <span className="rounded-full bg-white px-3 py-1 text-[11px] font-bold text-[#0369a1] shadow-sm ring-1 ring-sky-100">
                   {collectedAmountManual ? "chỉnh tay" : "tự động"}
                 </span>
               </div>
 
-              <div className="flex flex-col gap-3">
-                <div className="rounded-[20px] bg-white p-3 ring-1 ring-sky-100">
-                  <div className="mb-2 flex flex-col justify-between gap-2 sm:flex-row sm:items-center">
-                    <div className="text-[11px] font-semibold text-neutral-500">
+              <div className="space-y-3">
+                {/* Card 1: Tiền thu */}
+                <div className="rounded-[20px] bg-white p-3.5 shadow-sm ring-1 ring-sky-100/80">
+                  <div className="mb-2 flex items-center justify-between">
+                    <span className="text-[12px] font-bold text-slate-700">
                       Tiền thu
-                    </div>
-
+                    </span>
                     <div className="flex items-center gap-2">
                       {isNewCase && (
-                        <div className="flex items-center gap-1">
-                          <span className="text-[10px] text-neutral-500">
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-[11px] font-medium text-slate-500">
                             SL mẫu:
                           </span>
                           <input
@@ -194,14 +194,14 @@ export default function CaseInfoSection({
                               setSampleCount(val);
                               setCollectedAmountManual(false);
                             }}
-                            className="w-12 rounded-lg border border-sky-200 bg-sky-50 px-1 py-0.5 text-center text-[11px] outline-none focus:ring-2 focus:ring-sky-100"
+                            className="w-12 rounded-lg border border-sky-200 bg-sky-50 px-2 py-0.5 text-center text-[11px] font-semibold outline-none focus:ring-2 focus:ring-sky-200"
                           />
                         </div>
                       )}
 
                       <button
                         type="button"
-                        className="rounded-lg bg-sky-50 px-2.5 py-1 text-[11px] font-bold text-sky-700 ring-1 ring-sky-200 hover:bg-sky-100"
+                        className="rounded-xl border border-sky-200 bg-sky-50/80 px-3 py-1 text-[11px] font-bold text-sky-700 transition hover:bg-sky-100"
                         onClick={() => {
                           patchForm({
                             collectedAmount: suggestedPrice * sampleCount,
@@ -223,70 +223,62 @@ export default function CaseInfoSection({
                     }}
                     tone="sky"
                   />
-                  <div className="mt-1 text-[13px] font-bold text-sky-700">
+                  <div className="mt-1.5 text-[13px] font-bold text-[#0284c7]">
                     {fmtMoney(form.collectedAmount ?? 0)}
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-                  <div className="rounded-[20px] bg-amber-50/70 p-3 ring-1 ring-amber-200">
-                    <div className="mb-2 text-[11px] font-semibold text-amber-800">
-                      Giá gốc (Tự động theo SP)
+                {/* Card 2: Phí vận chuyển */}
+                <div className="rounded-[20px] bg-[#f0f9ff] p-3.5 shadow-sm ring-1 ring-sky-100/80">
+                  <div className="mb-2 text-[12px] font-bold text-slate-700">
+                    Phí vận chuyển
+                  </div>
+                  <Input
+                    value={fmtMoney((form as any).shippingFee ?? 0)}
+                    onChange={(v) => {
+                      const n = parseMoneyInput(v);
+                      patchForm({ shippingFee: n } as any);
+                    }}
+                    placeholder="0"
+                    tone="sky"
+                  />
+                  <div className="mt-1.5 text-[13px] font-bold text-[#0284c7]">
+                    {fmtMoney((form as any).shippingFee ?? 0)}
+                  </div>
+                </div>
+
+                {/* Card 3: Summary Giá gốc & Lợi nhuận */}
+                <div className="grid grid-cols-1 gap-2.5 pt-1 sm:grid-cols-2">
+                  <div className="rounded-[18px] bg-amber-50/80 p-3 ring-1 ring-amber-200/80">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-bold text-amber-800">
+                        Giá gốc (tự động)
+                      </span>
                     </div>
-                    <Input
-                      value={fmtMoney((form as any).costPrice ?? 0)}
-                      onChange={(v) => {
-                        const n = parseMoneyInput(v);
-                        patchForm({ costPrice: n } as any);
-                      }}
-                      placeholder="Tự động theo SP..."
-                      tone="rose"
-                    />
-                    <div className="mt-1 text-[12px] font-bold text-amber-800">
+                    <div className="mt-1 text-[14px] font-bold text-amber-900">
                       {fmtMoney((form as any).costPrice ?? 0)} đ
                     </div>
                   </div>
 
-                  <div className="rounded-[20px] bg-cyan-50/60 p-3 ring-1 ring-cyan-100">
-                    <div className="mb-2 text-[11px] font-semibold text-cyan-700">
-                      Phí xử lý / Vận chuyển
+                  <div className="rounded-[18px] bg-emerald-50/90 p-3 ring-1 ring-emerald-200/90">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-bold text-emerald-800">
+                        Lợi nhuận dự kiến
+                      </span>
                     </div>
-                    <Input
-                      value={fmtMoney((form as any).shippingFee ?? 0)}
-                      onChange={(v) => {
-                        const n = parseMoneyInput(v);
-                        patchForm({ shippingFee: n } as any);
-                      }}
-                      placeholder="Nhập phí xử lý..."
-                      tone="sky"
-                    />
-                    <div className="mt-1 text-[12px] font-bold text-cyan-700">
-                      {fmtMoney((form as any).shippingFee ?? 0)} đ
+                    <div className="mt-1 text-[15px] font-black tabular-nums text-emerald-700">
+                      {fmtMoney(
+                        (form.collectedAmount || 0) -
+                          ((form.shippingFee || 0) + (form.costPrice || 0)),
+                      )}{" "}
+                      đ
                     </div>
-                  </div>
-                </div>
-
-                <div className="rounded-[20px] bg-emerald-50 p-3.5 ring-1 ring-emerald-200">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[12px] font-bold text-emerald-800">
-                      Lợi nhuận dự kiến
-                    </span>
-                    <span className="text-[10px] text-emerald-600">
-                      = Tiền thu - Phí xử lý - Giá gốc
-                    </span>
-                  </div>
-                  <div className="mt-1 text-[16px] font-black tabular-nums text-emerald-700">
-                    {fmtMoney(
-                      (form.collectedAmount || 0) -
-                        ((form.shippingFee || 0) + (form.costPrice || 0)),
-                    )}{" "}
-                    đ
                   </div>
                 </div>
 
                 {isAccountingAdmin && (
-                  <div className="rounded-[20px] bg-sky-50/60 p-3 ring-1 ring-sky-100">
-                    <div className="mb-2 text-[11px] font-semibold text-indigo-700">
+                  <div className="rounded-[18px] bg-white p-3 ring-1 ring-sky-100 shadow-sm">
+                    <div className="mb-1.5 text-[11px] font-semibold text-indigo-700">
                       Tiền đã nhận thực tế (Kế toán)
                     </div>
                     <Input

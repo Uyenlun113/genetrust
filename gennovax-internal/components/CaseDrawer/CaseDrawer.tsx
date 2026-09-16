@@ -193,29 +193,14 @@ export default function CaseDrawer({
   const suggestedCostPrice = useMemo(() => {
     if (!form || (!form.serviceCode && !form.serviceId)) return 0;
 
-    if (selectedDoctor && selectedDoctor.servicePrices) {
-      const foundDoctorPrice = selectedDoctor.servicePrices.find(
-        (sp) =>
-          sp.serviceCode === form.serviceCode ||
-          String(sp.serviceId) === String(form.serviceId),
-      );
-      if (foundDoctorPrice && Number(foundDoctorPrice.listPrice || 0) > 0) {
-        return Number(foundDoctorPrice.listPrice);
-      }
-    }
-
     const foundCatalogService = (services || []).find(
       (s) =>
         s.serviceCode === form.serviceCode ||
         String(s._id) === String(form.serviceId),
     );
 
-    return Number(
-      (foundCatalogService as any)?.listPrice ||
-        (foundCatalogService as any)?.price ||
-        0,
-    );
-  }, [form, selectedDoctor, services]);
+    return Number(foundCatalogService?.costPrice || 0);
+  }, [form, services]);
 
   const serviceItemsForSelect = useMemo(() => {
     const baseItems = availableServicesBySource.map(({ service }) => ({
@@ -272,13 +257,7 @@ export default function CaseDrawer({
     const doctorPrice = selectedDoctor?.servicePrices?.find(
       (sp) => sp.serviceCode === serviceCode,
     );
-    const autoCostUnit = Number(
-      (catalogItem as any)?.costPrice ||
-        doctorPrice?.listPrice ||
-        (catalogItem as any)?.listPrice ||
-        (catalogItem as any)?.price ||
-        0,
-    );
+    const autoCostUnit = Number(catalogItem?.costPrice || 0);
 
     patchForm({
       serviceCode,

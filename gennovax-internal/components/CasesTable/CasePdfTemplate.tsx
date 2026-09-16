@@ -229,7 +229,7 @@ export const CasePdfTemplate = forwardRef<HTMLDivElement, Props>(
             <div className="grid grid-cols-2 gap-y-1.5 gap-x-8 text-[13px]">
               <p className="flex justify-between border-b border-dashed border-slate-200 pb-1">
                 <span className="font-medium text-slate-600">
-                  GX nhận file :
+                  GT nhận file :
                 </span>
                 <span>{formatCheck(data.gxHardFileReceived)}</span>
               </p>

@@ -68,7 +68,7 @@ const CASE_CHANGE_LABELS = {
   gxReceived: 'GX nhận',
   softFileDone: 'Trả file mềm',
   hardFileDone: 'Trả file cứng',
-  gxHardFileReceived: 'GX nhận file cứng',
+  gxHardFileReceived: 'GT nhận file cứng',
   mailTrackingCode: 'Mã đi thư',
   mailStatus: 'Trạng thái thư',
   mailTrackingEnabled: 'Theo dõi thư',
