@@ -12,7 +12,12 @@ const roboto = Roboto({
 
 export const metadata: Metadata = {
   title: "Trang quản trị Genetrust",
-  description: "Genetrust-managerment",
+  description: "Genetrust-management",
+  icons: {
+    icon: "/Logo Genetrust-08.png",
+    shortcut: "/Logo Genetrust-08.png",
+    apple: "/Logo Genetrust-08.png",
+  },
 };
 
 export default function RootLayout({
