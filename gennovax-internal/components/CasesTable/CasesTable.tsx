@@ -206,7 +206,7 @@ export default function CasesTable({
               <col className="w-[160px]" /> {/* 5. Họ và tên */}
               <col className="w-[120px]" /> {/* 6. SĐT */}
               <col className="w-[100px]" /> {/* 7. Lab */}
-              <col className="w-[100px]" /> {/* 8. Dịch vụ */}
+              <col className="w-[135px]" /> {/* 8. Dịch vụ */}
               <col className="w-[110px]" /> {/* 9. Mã hàng */}
               <col className="w-[120px]" /> {/* 10. Chi nhánh */}
               <col className="w-[130px]" /> {/* 11. Nguồn */}

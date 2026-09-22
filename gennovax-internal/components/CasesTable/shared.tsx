@@ -20,7 +20,8 @@ export function Pill({
   };
   return (
     <span
-      className={`inline-flex items-center justify-center rounded-full px-2.5 py-1 text-[11px] font-semibold ring-1 ${map[tone]} whitespace-nowrap`}
+      className={`inline-flex max-w-full items-center justify-center rounded-full px-2.5 py-1 text-[11px] font-semibold ring-1 ${map[tone]} truncate whitespace-nowrap`}
+      title={text}
     >
       {text || "—"}
     </span>
