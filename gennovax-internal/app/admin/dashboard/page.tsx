@@ -214,7 +214,7 @@ export default function AdminDashboardPage() {
               <div className="max-h-[420px] overflow-auto rounded-[24px] border border-slate-200">
                 <table className="w-full border-collapse text-sm">
                   <thead className="sticky top-0 z-10 bg-sky-50/90 backdrop-blur">
-                    <tr className="text-xs uppercase tracking-[0.14em] text-slate-500">
+                    <tr className="text-xs uppercase tracking-[0.14em] text-slate-600">
                       <Th>#</Th>
                       <Th>Tên nguồn</Th>
                       <Th right>{sourceMetricLabel}</Th>
@@ -226,7 +226,7 @@ export default function AdminDashboardPage() {
                       <tr>
                         <td
                           colSpan={4}
-                          className="py-8 text-center text-slate-400"
+                          className="py-8 text-center text-slate-500 font-medium"
                         >
                           Không có dữ liệu
                         </td>
@@ -237,14 +237,14 @@ export default function AdminDashboardPage() {
                           key={x.source}
                           className="border-t border-slate-100 hover:bg-sky-50/40"
                         >
-                          <Td className="w-8 text-slate-400">{i + 1}</Td>
+                          <Td className="w-8 text-slate-500 font-semibold">{i + 1}</Td>
                           <Td className="font-semibold text-slate-900">
                             {x.source}
                           </Td>
                           <Td right className="font-semibold text-sky-700">
                             {money(x[p1SourceMetric])}
                           </Td>
-                          <Td right>
+                          <Td right className="font-semibold text-slate-700">
                             {x.source.includes("2025") ? "#" : x.cases}
                           </Td>
                         </tr>
@@ -279,15 +279,24 @@ export default function AdminDashboardPage() {
                       vertical={false}
                       stroke="#dbeafe"
                     />
-                    <XAxis dataKey="ym" tick={{ fontSize: 12 }} />
+                    <XAxis dataKey="ym" tick={{ fontSize: 12, fill: "#475569" }} />
                     <YAxis
                       tickFormatter={(v) => moneyMil(v)}
                       width={65}
-                      tick={{ fontSize: 12 }}
+                      tick={{ fontSize: 12, fill: "#475569" }}
                     />
                     <Tooltip
                       formatter={(v: any) => moneyMil(Number(v || 0))}
                       cursor={{ fill: "rgba(224,242,254,0.35)" }}
+                      contentStyle={{
+                        backgroundColor: "#ffffff",
+                        borderColor: "#e2e8f0",
+                        borderRadius: "12px",
+                        color: "#0f172a",
+                        boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
+                      }}
+                      itemStyle={{ color: "#0ea5e9", fontWeight: 600 }}
+                      labelStyle={{ color: "#0f172a", fontWeight: 700 }}
                     />
                     <Legend />
                     <Bar
@@ -302,7 +311,7 @@ export default function AdminDashboardPage() {
                         formatter={(v: any) => moneyMil(v)}
                         style={{
                           fontSize: "10px",
-                          fill: "#64748b",
+                          fill: "#475569",
                           fontWeight: 600,
                         }}
                       />
@@ -361,17 +370,26 @@ export default function AdminDashboardPage() {
                     <XAxis
                       type="number"
                       tickFormatter={(v) => moneyMil(v)}
-                      tick={{ fontSize: 11 }}
+                      tick={{ fontSize: 11, fill: "#475569" }}
                     />
                     <YAxis
                       type="category"
                       dataKey="serviceName"
-                      width={100}
-                      tick={{ fontSize: 10, fontWeight: "bold" }}
+                      width={110}
+                      tick={{ fontSize: 10, fontWeight: "bold", fill: "#334155" }}
                     />
                     <Tooltip
                       formatter={(v: any) => moneyMil(Number(v || 0))}
                       cursor={{ fill: "rgba(224,242,254,0.35)" }}
+                      contentStyle={{
+                        backgroundColor: "#ffffff",
+                        borderColor: "#e2e8f0",
+                        borderRadius: "12px",
+                        color: "#0f172a",
+                        boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
+                      }}
+                      itemStyle={{ color: "#0284c7", fontWeight: 600 }}
+                      labelStyle={{ color: "#0f172a", fontWeight: 700 }}
                     />
                     <Legend />
                     <Bar
@@ -387,7 +405,7 @@ export default function AdminDashboardPage() {
                         formatter={(v: any) => moneyMil(v)}
                         style={{
                           fontSize: "10px",
-                          fill: "#64748b",
+                          fill: "#475569",
                           fontWeight: 600,
                         }}
                       />
@@ -407,7 +425,7 @@ export default function AdminDashboardPage() {
                     <col className="w-[70px]" />
                   </colgroup>
                   <thead className="sticky top-0 z-10 bg-sky-50/90 backdrop-blur">
-                    <tr className="text-xs uppercase tracking-[0.14em] text-slate-500">
+                    <tr className="text-xs uppercase tracking-[0.14em] text-slate-600">
                       <Th>Mã gói</Th>
                       <Th>Tên dịch vụ</Th>
                       <Th right>LN dự kiến</Th>
@@ -419,7 +437,7 @@ export default function AdminDashboardPage() {
                       <tr>
                         <td
                           colSpan={4}
-                          className="py-8 text-center text-slate-400"
+                          className="py-8 text-center text-slate-500 font-medium"
                         >
                           Không có dữ liệu
                         </td>
@@ -430,14 +448,14 @@ export default function AdminDashboardPage() {
                           key={x.serviceCode}
                           className="border-t border-slate-100 hover:bg-sky-50/40"
                         >
-                          <Td className="text-xs">{x.serviceCode || "—"}</Td>
-                          <Td className="text-xs">
+                          <Td className="text-xs font-semibold text-slate-700">{x.serviceCode || "—"}</Td>
+                          <Td className="text-xs font-medium text-slate-900">
                             {x.serviceName || "Chưa xác định"}
                           </Td>
                           <Td right className="font-semibold text-sky-700">
                             {money(x.netRevenue)}
                           </Td>
-                          <Td right>{x.cases}</Td>
+                          <Td right className="font-semibold text-slate-700">{x.cases}</Td>
                         </tr>
                       ))
                     )}
@@ -501,7 +519,7 @@ function KpiCard({
 
   return (
     <div className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_12px_40px_-34px_rgba(15,23,42,0.3)]">
-      <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
+      <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
         {title}
       </div>
       <div
@@ -509,7 +527,7 @@ function KpiCard({
       >
         {value}
       </div>
-      <div className="mt-1 text-xs text-slate-500">{sub}</div>
+      <div className="mt-1 text-xs text-slate-600">{sub}</div>
     </div>
   );
 }
@@ -530,12 +548,13 @@ function SelectPill({ value, onChange, options }: any) {
   );
 }
 
-function Th({ children, right }: any) {
+function Th({ children, right, className }: any) {
   return (
     <th
       className={cn(
-        "border-b border-slate-100 px-4 py-3 text-left font-semibold",
+        "border-b border-slate-200 px-4 py-3 text-left font-semibold text-slate-700",
         right && "text-right",
+        className
       )}
     >
       {children}
@@ -545,7 +564,13 @@ function Th({ children, right }: any) {
 
 function Td({ children, right, className }: any) {
   return (
-    <td className={cn("px-4 py-3", right && "text-right", className)}>
+    <td
+      className={cn(
+        "px-4 py-3 text-slate-800",
+        right && "text-right",
+        className
+      )}
+    >
       {children}
     </td>
   );
