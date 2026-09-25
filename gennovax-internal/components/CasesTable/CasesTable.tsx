@@ -58,7 +58,7 @@ export default function CasesTable({
 
   const isAccountingAdmin = user?.role === "accounting_admin";
   const isAdminOrSuper = user?.role === "admin" || user?.role === "super_admin";
-  const colCount = 31 + (isAccountingAdmin ? 4 : 0) + (isAdminOrSuper ? 1 : 0);
+  const colCount = 29 + (isAdminOrSuper ? 3 : 0) + (isAccountingAdmin ? 4 : 0);
 
   const [historyModalOpen, setHistoryModalOpen] = useState(false);
   const [selectedCaseInfo, setSelectedCaseInfo] = useState<{
@@ -216,8 +216,8 @@ export default function CasesTable({
               <col className="w-[130px]" /> {/* 15. Ngày trả kết quả */}
               <col className="w-[120px]" /> {/* 16. Phí xử lý mẫu */}
               <col className="w-[130px]" /> {/* 17. Tiền thu */}
-              <col className="w-[120px]" /> {/* 18. Giá gốc */}
-              <col className="w-[140px]" /> {/* 19. Lợi nhuận dự kiến */}
+              {isAdminOrSuper && <col className="w-[120px]" />} {/* 18. Giá gốc */}
+              {isAdminOrSuper && <col className="w-[140px]" />} {/* 19. Lợi nhuận dự kiến */}
               <col className="w-[130px]" /> {/* 20. Mẫu chuyển lab */}
               <col className="w-[130px]" /> {/* 21. Tiếp nhận mẫu */}
               <col className="w-[130px]" /> {/* 22. Xử lý mẫu */}
@@ -353,10 +353,14 @@ export default function CasesTable({
                 </th>
 
                 {/* 18. Giá gốc (Tự động bắt theo danh mục SP) */}
-                <th className={`${thBase} bg-amber-50/90 text-right font-bold text-amber-900`}>Giá gốc</th>
+                {isAdminOrSuper && (
+                  <th className={`${thBase} bg-amber-50/90 text-right font-bold text-amber-900`}>Giá gốc</th>
+                )}
 
                 {/* 19. Lợi nhuận dự kiến (Tiền thu - Phí xử lý - Giá gốc) */}
-                <th className={`${thBase} bg-emerald-50/90 text-right font-bold text-emerald-900`}>Lợi nhuận dự kiến</th>
+                {isAdminOrSuper && (
+                  <th className={`${thBase} bg-emerald-50/90 text-right font-bold text-emerald-900`}>Lợi nhuận dự kiến</th>
+                )}
 
                 {/* 18. Mẫu chuyển lab */}
                 <th className={`${thBase} bg-sky-50`}>Mẫu chuyển lab</th>
@@ -425,12 +429,6 @@ export default function CasesTable({
                 )}
                 {isAccountingAdmin && (
                   <th className={`${thBase} bg-white/80`}>Đã nhận TT</th>
-                )}
-                {isAccountingAdmin && (
-                  <th className={`${thBase} bg-sky-50`}>Giá cost</th>
-                )}
-                {isAccountingAdmin && (
-                  <th className={`${thBase} bg-white/80 ${!isAdminOrSuper ? "sticky right-0 top-0 z-50 shadow-[-1px_0_0_rgba(186,230,253,0.9)]" : ""}`}>Lợi nhuận</th>
                 )}
 
                 {/* Admin column (Fixed Right 0) */}

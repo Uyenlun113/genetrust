@@ -106,6 +106,9 @@ export default function AdminDashboardPage() {
   const kpis = p1Data?.kpis || {
     totalCases: 0,
     paidCases: 0,
+    returnedCases: 0,
+    processingCases: 0,
+    overdueCases: 0,
     totalRevenue: 0,
     totalCost: 0,
     totalNetRevenue: 0,
@@ -162,6 +165,36 @@ export default function AdminDashboardPage() {
             </div>
           </section>
 
+          {/* Báo cáo số lượng & Tiến độ xử lý ca */}
+          <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <KpiCard
+              title="Tổng số ca"
+              value={`${kpis.totalCases || 0} ca`}
+              sub="Tất cả ca tiếp nhận"
+              tone="sky"
+            />
+            <KpiCard
+              title="Các ca đã trả KQ"
+              value={`${kpis.returnedCases || 0} ca`}
+              sub="Đã hoàn thành trả KQ"
+              tone="emerald"
+            />
+            <KpiCard
+              title="Các ca đang xử lý"
+              value={`${kpis.processingCases || 0} ca`}
+              sub="Đang trong quy trình xử lý"
+              tone="amber"
+            />
+            <KpiCard
+              title="Các ca quá hạn xử lý"
+              value={`${kpis.overdueCases || 0} ca`}
+              sub={kpis.overdueCases > 0 ? "Chưa trả KQ & đã quá hẹn" : "Không có ca quá hạn"}
+              tone={kpis.overdueCases > 0 ? "rose" : "default"}
+              alert={kpis.overdueCases > 0}
+            />
+          </section>
+
+          {/* Báo cáo tài chính & doanh thu */}
           <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5">
             <KpiCard
               title="Tổng doanh thu"
@@ -495,14 +528,15 @@ function KpiCard({
   value,
   sub,
   highlight = false,
+  alert = false,
   tone = "default",
 }: any) {
   const toneMap: Record<string, string> = {
     default: "text-slate-900",
-    rose: "text-rose-600",
-    amber: "text-amber-600",
-    emerald: "text-emerald-600",
-    sky: "text-sky-700",
+    rose: "text-rose-600 font-extrabold",
+    amber: "text-amber-600 font-extrabold",
+    emerald: "text-emerald-600 font-extrabold",
+    sky: "text-sky-700 font-extrabold",
   };
 
   if (highlight) {
@@ -518,16 +552,32 @@ function KpiCard({
   }
 
   return (
-    <div className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_12px_40px_-34px_rgba(15,23,42,0.3)]">
-      <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
-        {title}
+    <div
+      className={cn(
+        "rounded-[28px] border bg-white p-5 shadow-[0_12px_40px_-34px_rgba(15,23,42,0.3)] transition-all",
+        alert
+          ? "border-rose-300 bg-rose-50/40 ring-2 ring-rose-200/60"
+          : "border-slate-200"
+      )}
+    >
+      <div className="flex items-center justify-between">
+        <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+          {title}
+        </div>
+        {alert && (
+          <span className="inline-flex items-center rounded-full bg-rose-100 px-2 py-0.5 text-[10px] font-bold text-rose-700 animate-pulse">
+            Cần chú ý
+          </span>
+        )}
       </div>
       <div
         className={cn("mt-3 text-2xl font-bold tabular-nums", toneMap[tone])}
       >
         {value}
       </div>
-      <div className="mt-1 text-xs text-slate-600">{sub}</div>
+      <div className={cn("mt-1 text-xs", alert ? "font-medium text-rose-600" : "text-slate-600")}>
+        {sub}
+      </div>
     </div>
   );
 }

@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import * as XLSX from "xlsx";
 import { api } from "@/lib/api";
 import type { CaseRecord, CaseServiceGroup } from "@/lib/types";
+import { useAuth } from "@/lib/auth";
 
 const serviceOptions: Array<{ label: string; value: CaseServiceGroup }> = [
   { label: "NIPT", value: "NIPT" },
@@ -35,6 +36,7 @@ interface MobileHeaderProps {
 }
 
 export default function CasesHeaderMobile(props: MobileHeaderProps) {
+  const { user } = useAuth();
   const [showExportMenu, setShowExportMenu] = useState(false);
   const [exportMonth, setExportMonth] = useState(formatLocalMonth(new Date()));
   const [isExporting, setIsExporting] = useState(false);
@@ -91,39 +93,52 @@ export default function CasesHeaderMobile(props: MobileHeaderProps) {
         return;
       }
 
-      const excelData = data.map((item, index: number) => ({
-        STT: item.stt || index + 1,
-        "Ngày tạo": item.date
-          ? new Date(item.date).toLocaleDateString("vi-VN")
-          : "",
-        "Mã ca": item.caseCode || "",
-        "Tên bệnh nhân": item.patientName || "",
-        SĐT: item.patientPhone || "",
-        "Loại hóa đơn":
-          item.invoiceType === "personal"
-            ? "Cá nhân"
-            : item.invoiceType === "company"
-              ? "Công ty"
-              : "",
-        "Số CCCD/CMND": item.invoiceIdCard || "",
-        "Ngày cấp": item.invoiceIssueDate || "",
-        "Nơi cấp": item.invoiceIssuePlace || "",
-        "Địa chỉ": item.invoiceAddress || "",
-        "Nhóm dịch vụ": item.serviceType || "",
-        "Tên dịch vụ": item.serviceName || "",
-        "Mã dịch vụ": item.serviceCode || "",
-        "Phòng Lab": item.lab || "",
-        "Nguồn khách": item.source || "",
-        "NVKD phụ trách": item.salesOwner || "",
-        "Giá thu (VNĐ)": item.collectedAmount || 0,
-        "Giá vốn/Cost (VNĐ)": item.costPrice || 0,
-        "Phí vận chuyển (VNĐ)": item.shippingFee || 0,
-        "Lợi nhuận (VNĐ)":
-          (item.collectedAmount || 0) -
-          (item.costPrice || 0) -
-          (item.shippingFee || 0),
-        "Đã thanh toán": item.paid ? "Đã thanh toán" : "Chưa thanh toán",
-      }));
+      const isAdminOrSuper = user?.role === "admin" || user?.role === "super_admin";
+      const excelData = data.map((item, index: number) => {
+        const rowData: Record<string, any> = {
+          STT: item.stt || index + 1,
+          "Ngày tạo": item.date
+            ? new Date(item.date).toLocaleDateString("vi-VN")
+            : "",
+          "Mã ca": item.caseCode || "",
+          "Tên bệnh nhân": item.patientName || "",
+          SĐT: item.patientPhone || "",
+          "Loại hóa đơn":
+            item.invoiceType === "personal"
+              ? "Cá nhân"
+              : item.invoiceType === "company"
+                ? "Công ty"
+                : "",
+          "Số CCCD/CMND": item.invoiceIdCard || "",
+          "Ngày cấp": item.invoiceIssueDate || "",
+          "Nơi cấp": item.invoiceIssuePlace || "",
+          "Địa chỉ": item.invoiceAddress || "",
+          "Nhóm dịch vụ": item.serviceType || "",
+          "Tên dịch vụ": item.serviceName || "",
+          "Mã dịch vụ": item.serviceCode || "",
+          "Phòng Lab": item.lab || "",
+          "Nguồn khách": item.source || "",
+          "NVKD phụ trách": item.salesOwner || "",
+          "Giá thu (VNĐ)": item.collectedAmount || 0,
+        };
+
+        if (isAdminOrSuper) {
+          rowData["Giá vốn/Cost (VNĐ)"] = item.costPrice || 0;
+        }
+
+        rowData["Phí vận chuyển (VNĐ)"] = item.shippingFee || 0;
+
+        if (isAdminOrSuper) {
+          rowData["Lợi nhuận (VNĐ)"] =
+            (item.collectedAmount || 0) -
+            (item.costPrice || 0) -
+            (item.shippingFee || 0);
+        }
+
+        rowData["Đã thanh toán"] = item.paid ? "Đã thanh toán" : "Chưa thanh toán";
+
+        return rowData;
+      });
 
       const worksheet = XLSX.utils.json_to_sheet(excelData);
       const workbook = XLSX.utils.book_new();

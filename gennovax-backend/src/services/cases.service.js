@@ -216,6 +216,50 @@ export async function getCasesAnalytics(query) {
               _id: null,
               totalCases: { $sum: 1 },
               paidCases: { $sum: { $cond: ['$paid', 1, 0] } },
+              returnedCases: {
+                $sum: {
+                  $cond: [
+                    {
+                      $or: [
+                        { $eq: ['$processStatus', 'Đã có KQ'] },
+                        { $ne: ['$returnedAt', null] },
+                      ],
+                    },
+                    1,
+                    0,
+                  ],
+                },
+              },
+              processingCases: {
+                $sum: {
+                  $cond: [
+                    {
+                      $and: [
+                        { $ne: ['$processStatus', 'Đã có KQ'] },
+                        { $eq: ['$returnedAt', null] },
+                      ],
+                    },
+                    1,
+                    0,
+                  ],
+                },
+              },
+              overdueCases: {
+                $sum: {
+                  $cond: [
+                    {
+                      $and: [
+                        { $ne: ['$processStatus', 'Đã có KQ'] },
+                        { $eq: ['$returnedAt', null] },
+                        { $ne: ['$dueDate', null] },
+                        { $lt: ['$dueDate', new Date()] },
+                      ],
+                    },
+                    1,
+                    0,
+                  ],
+                },
+              },
               totalRevenue: { $sum: { $ifNull: ['$collectedAmount', 0] } },
               totalCost: {
                 $sum: {
@@ -251,6 +295,9 @@ export async function getCasesAnalytics(query) {
               _id: 0,
               totalCases: 1,
               paidCases: 1,
+              returnedCases: 1,
+              processingCases: 1,
+              overdueCases: 1,
               totalRevenue: 1,
               totalCost: 1,
               actualNetRevenue: 1,
@@ -334,10 +381,14 @@ export async function getCasesAnalytics(query) {
     kpis: result?.kpis?.[0] || {
       totalCases: 0,
       paidCases: 0,
+      returnedCases: 0,
+      processingCases: 0,
+      overdueCases: 0,
       totalRevenue: 0,
       totalCost: 0,
       totalNetRevenue: 0,
       paidRate: 0,
+      actualNetRevenue: 0,
     },
     monthlyTrend: result?.monthlyTrend || [],
     bySource: result?.bySource || [],

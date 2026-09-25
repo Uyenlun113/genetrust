@@ -1,6 +1,7 @@
 "use client";
 
 import type { CaseDraft, DoctorItem } from "@/lib/types";
+import { useAuth } from "@/lib/auth";
 import { Field, Input, SearchableSelect, Select, Textarea } from "./shared";
 
 export default function CaseInfoSection({
@@ -38,6 +39,9 @@ export default function CaseInfoSection({
   parseMoneyInput: (value: string) => number;
   opt: (key: string) => { label: string; value: string }[];
 }) {
+  const { user } = useAuth();
+  const isAdminOrSuper = user?.role === "admin" || user?.role === "super_admin";
+
   return (
     <>
       <section className="rounded-[28px] bg-white p-4 ring-1 ring-sky-100 shadow-[0_18px_50px_-38px_rgba(14,116,144,0.32)] lg:col-span-2">
@@ -248,33 +252,35 @@ export default function CaseInfoSection({
                 </div>
 
                 {/* Card 3: Summary Giá gốc & Lợi nhuận */}
-                <div className="grid grid-cols-1 gap-2.5 pt-1 sm:grid-cols-2">
-                  <div className="rounded-[18px] bg-amber-50/80 p-3 ring-1 ring-amber-200/80">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-bold text-amber-800">
-                        Giá gốc (tự động)
-                      </span>
+                {isAdminOrSuper && (
+                  <div className="grid grid-cols-1 gap-2.5 pt-1 sm:grid-cols-2">
+                    <div className="rounded-[18px] bg-amber-50/80 p-3 ring-1 ring-amber-200/80">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px] font-bold text-amber-800">
+                          Giá gốc (tự động)
+                        </span>
+                      </div>
+                      <div className="mt-1 text-[14px] font-bold text-amber-900">
+                        {fmtMoney((form as any).costPrice ?? 0)} đ
+                      </div>
                     </div>
-                    <div className="mt-1 text-[14px] font-bold text-amber-900">
-                      {fmtMoney((form as any).costPrice ?? 0)} đ
-                    </div>
-                  </div>
 
-                  <div className="rounded-[18px] bg-emerald-50/90 p-3 ring-1 ring-emerald-200/90">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-bold text-emerald-800">
-                        Lợi nhuận dự kiến
-                      </span>
-                    </div>
-                    <div className="mt-1 text-[15px] font-black tabular-nums text-emerald-700">
-                      {fmtMoney(
-                        (form.collectedAmount || 0) -
-                          ((form.shippingFee || 0) + (form.costPrice || 0)),
-                      )}{" "}
-                      đ
+                    <div className="rounded-[18px] bg-emerald-50/90 p-3 ring-1 ring-emerald-200/90">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px] font-bold text-emerald-800">
+                          Lợi nhuận dự kiến
+                        </span>
+                      </div>
+                      <div className="mt-1 text-[15px] font-black tabular-nums text-emerald-700">
+                        {fmtMoney(
+                          (form.collectedAmount || 0) -
+                            ((form.shippingFee || 0) + (form.costPrice || 0)),
+                        )}{" "}
+                        đ
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
 
                 {isAccountingAdmin && (
                   <div className="rounded-[18px] bg-white p-3 ring-1 ring-sky-100 shadow-sm">

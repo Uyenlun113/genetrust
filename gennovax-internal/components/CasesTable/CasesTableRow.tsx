@@ -239,17 +239,21 @@ export default function CasesTableRow({
       </td>
 
       {/* 18. Giá gốc (tự động theo sản phẩm) */}
-      <td className={`${tdBase} text-right font-semibold tabular-nums text-amber-800`}>
-        {(row.costPrice ?? 0).toLocaleString()}
-      </td>
+      {isAdminOrSuper && (
+        <td className={`${tdBase} text-right font-semibold tabular-nums text-amber-800`}>
+          {(row.costPrice ?? 0).toLocaleString()}
+        </td>
+      )}
 
       {/* 19. Lợi nhuận dự kiến (Tiền thu - Phí xử lý mẫu - Giá gốc) */}
-      <td className={`${tdBase} text-right font-bold tabular-nums text-emerald-700`}>
-        {(
-          (row.collectedAmount || 0) -
-          ((row.shippingFee || 0) + (row.costPrice || 0))
-        ).toLocaleString()}
-      </td>
+      {isAdminOrSuper && (
+        <td className={`${tdBase} text-right font-bold tabular-nums text-emerald-700`}>
+          {(
+            (row.collectedAmount || 0) -
+            ((row.shippingFee || 0) + (row.costPrice || 0))
+          ).toLocaleString()}
+        </td>
+      )}
 
       {/* 18. Mẫu chuyển lab */}
       <td className={tdBase}>
