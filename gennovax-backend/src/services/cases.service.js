@@ -534,7 +534,11 @@ export async function listCases(query) {
     sourceValues,
     salesOwnerValues,
   ] = await Promise.all([
-    Case.find(filter).sort({ receivedAt: sortDirection }).skip(skip).limit(safeLimit).lean(),
+    Case.find(filter)
+      .sort({ createdAt: sortDirection, _id: sortDirection })
+      .skip(skip)
+      .limit(safeLimit)
+      .lean(),
     Case.countDocuments(filter),
     Case.distinct('processStatus', baseFilter),
     Case.distinct('mailStatus', baseFilter),
@@ -595,7 +599,11 @@ export async function getLegacyRootUnused(query) {
   const skip = (safePage - 1) * safeLimit;
 
   const [items, total] = await Promise.all([
-    Case.find(filter).sort({ receivedAt: -1 }).skip(skip).limit(safeLimit).lean(),
+    Case.find(filter)
+      .sort({ createdAt: -1, _id: -1 })
+      .skip(skip)
+      .limit(safeLimit)
+      .lean(),
     Case.countDocuments(filter),
   ]);
 

@@ -291,23 +291,7 @@ export default function CasesTableRow({
         />
       </td>
 
-      {/* 24. Trả file mềm */}
-      <td className={`${tdBase} text-center`}>
-        <Pill
-          text={row.softFileDone ? "Đã trả" : "Chưa"}
-          tone={row.softFileDone ? "emerald" : "rose"}
-        />
-      </td>
-
-      {/* 25. Trả file cứng */}
-      <td className={`${tdBase} text-center`}>
-        <Pill
-          text={row.hardFileDone ? "Đã trả" : "Chưa"}
-          tone={row.hardFileDone ? "emerald" : "rose"}
-        />
-      </td>
-
-      {/* 26. Số CCCD / Hộ chiếu */}
+      {/* 24. Số CCCD / Hộ chiếu */}
       <td className={tdBase}>
         <div className="font-medium text-slate-800">
           {row.invoiceIdCard || "—"}

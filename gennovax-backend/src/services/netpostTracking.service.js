@@ -1,18 +1,26 @@
 import cron from 'node-cron';
 import Case from '../models/Case.model.js';
 
-const NETPOST_URLS = [
-  'https://netpost.vn/Home/tra_cuu_van_don',
+const NEWPOST_TRACKING_URL = 'https://newpost.vn/tracking';
+const NEWPOST_API_FIND = 'https://api.newpost.vn/api/Bill/find';
+const NEWPOST_API_CHECK = 'https://api.newpost.vn/api/Bill/cmdKiemTraVanDonCapNhatTenNguoiNhan';
+
+const DELIVERED_KEYWORDS = [
+  'đã chuyển tới',
+  'đã giao',
+  'giao thành công',
+  'phát thành công',
+  'đã nhận thư',
+  'đã nhận',
+  'thành công',
+  'hoàn tất',
 ];
-const NETPOST_TRACE_URLS = [
-  'https://netpost.vn/Home/ListTrackAndTrace',
-];
-const DELIVERED_TEXT = 'đã chuyển tới';
+
 const CHECK_TIMEOUT_MS = 15000;
-const MANUAL_CHECK_MIN_MS = 5000;
+const MANUAL_CHECK_MIN_MS = 1500;
 
 function logTracking(...args) {
-  console.log('[NetpostTracking]', ...args);
+  console.log('[NewpostTracking]', ...args);
 }
 
 function decodeHtml(value = '') {
@@ -35,317 +43,156 @@ function normalizeText(value = '') {
   return stripTags(value).toLocaleLowerCase('vi-VN');
 }
 
-function getDebugSnippet(html = '') {
-  return stripTags(html).slice(0, 260);
+export function isDeliveredStatus(text = '') {
+  const norm = normalizeText(text);
+  return DELIVERED_KEYWORDS.some((kw) => norm.includes(kw));
 }
 
-function extractTableBody(html = '') {
-  const tableMatch = String(html).match(
-    /<table\b[^>]*\bid=["']listTrackAndTrace["'][^>]*>([\s\S]*?)<\/table>/i
-  );
-  if (!tableMatch) return '';
-
-  const bodyMatch = tableMatch[1].match(/<tbody\b[^>]*>([\s\S]*?)<\/tbody>/i);
-  return bodyMatch ? bodyMatch[1] : tableMatch[1];
-}
-
-function extractCells(rowHtml = '') {
-  return [...String(rowHtml).matchAll(/<td\b[^>]*>([\s\S]*?)<\/td>/gi)].map(
-    (match) => stripTags(match[1])
-  );
-}
-
-function findLatestTrackingRow(html = '') {
-  const rows = [...String(html).matchAll(/<tr\b([^>]*)>([\s\S]*?)<\/tr>/gi)];
-
-  return rows
-    .map((match) => ({
-      attrs: match[1] || '',
-      cells: extractCells(match[2] || ''),
-    }))
-    .find((row) => {
-      const style = row.attrs.match(/style=["']([^"']*)["']/i)?.[1] || '';
-      return (
-        /border-bottom/i.test(style) &&
-        row.cells.length >= 2 &&
-        /\d{1,2}\/\d{1,2}\/\d{4}/.test(row.cells[0])
-      );
-    });
-}
-
-function getRowDebug(html = '') {
-  return [...String(html).matchAll(/<tr\b([^>]*)>([\s\S]*?)<\/tr>/gi)]
-    .map((match, index) => {
-      const attrs = match[1] || '';
-      if (!/border-bottom/i.test(attrs)) return null;
-
-      const cells = extractCells(match[2] || '');
-      return {
-        index,
-        attrs: stripTags(attrs).slice(0, 160),
-        cellCount: cells.length,
-        cells: cells.slice(0, 3),
-      };
-    })
-    .filter(Boolean)
-    .slice(0, 8);
-}
-
-function getAround(value = '', keyword = '', radius = 420) {
-  const source = String(value);
-  const index = source.indexOf(keyword);
-  if (index < 0) return '';
-
-  return stripTags(
-    source.slice(Math.max(0, index - radius), index + keyword.length + radius)
-  );
-}
-
-export function parseNetpostTracking(html = '') {
-  const tbody = extractTableBody(html);
-  const latestRow = findLatestTrackingRow(tbody || html);
-
-  if (!latestRow) {
-    return {
-      mailStatus: 'Chưa gửi thư',
-      latestTime: '',
-      latestStatus: '',
-    };
-  }
-
-  const latestTime = latestRow.cells[0] || '';
-  const latestStatus = latestRow.cells.slice(1).join(' ').trim();
-  const delivered = normalizeText(latestStatus).includes(DELIVERED_TEXT);
-
-  return {
-    mailStatus: delivered ? 'Đã nhận thư' : 'Đang gửi thư',
-    latestTime,
-    latestStatus,
-  };
-}
-
-
-function findTrackingList(value) {
-  if (!value || typeof value !== 'object') return [];
-  if (Array.isArray(value)) return value;
-
-  const candidates = [
-    value.Object,
-    value.ListTrackAndTrace,
-    value.listTrackAndTrace,
-    value.TrackAndTrace,
-    value.Data,
-    value.data,
-    value.List,
-    value.lst,
-  ];
-
-  for (const candidate of candidates) {
-    if (Array.isArray(candidate)) return candidate;
-    if (candidate && typeof candidate === 'object') {
-      for (const nested of Object.values(candidate)) {
-        if (Array.isArray(nested)) return nested;
-      }
-    }
-  }
-
-  for (const candidate of Object.values(value)) {
-    if (Array.isArray(candidate)) return candidate;
-    if (candidate && typeof candidate === 'object') {
-      for (const nested of Object.values(candidate)) {
-        if (Array.isArray(nested)) return nested;
-      }
-    }
-  }
-
-  return [];
-}
-
-function parseNetpostJsonTracking(payload) {
-  const list = findTrackingList(payload);
-  const latest = list.find((item) => {
-    if (!item || typeof item !== 'object') return false;
-
-    return (
-      (item.INSERT_TIME_STRING || item.InsertTimeString || item.insertTimeString) &&
-      (item.DESC || item.Desc || item.desc)
-    );
-  });
-
-  if (!latest) {
-    return {
-      mailStatus: 'Chưa gửi thư',
-      latestTime: '',
-      latestStatus: '',
-    };
-  }
-
-  const latestTime = String(
-    latest.INSERT_TIME_STRING ||
-      latest.InsertTimeString ||
-      latest.insertTimeString ||
-      ''
-  ).trim();
-  const latestStatus = String(latest.DESC || latest.Desc || latest.desc || '').trim();
-  const delivered = normalizeText(latestStatus).includes(DELIVERED_TEXT);
-
-  return {
-    mailStatus: delivered ? 'Đã nhận thư' : 'Đang gửi thư',
-    latestTime,
-    latestStatus,
-  };
-}
-
-async function fetchNetpostJsonTracking(safeCode) {
-  let lastError = null;
-
-  for (const url of NETPOST_TRACE_URLS) {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), CHECK_TIMEOUT_MS);
-
-    try {
-      const origin = new URL(url).origin;
-      logTracking('fetch-json', safeCode, url);
-
-      const res = await fetch(url, {
-        method: 'POST',
-        signal: controller.signal,
-        headers: {
-          Accept: 'application/json, text/javascript, */*; q=0.01',
-          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-          Origin: origin,
-          Referer:
-            origin +
-            '/Home/tra_cuu_van_don?hawbNo=' +
-            encodeURIComponent(safeCode),
-          'X-Requested-With': 'XMLHttpRequest',
-          'User-Agent':
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124.0 Safari/537.36',
-        },
-        body: new URLSearchParams({ MaBPBK: safeCode }),
-      });
-
-      if (!res.ok) throw new Error('Netpost JSON HTTP ' + res.status);
-
-      const payload = JSON.parse(await res.text());
-      const parsed = parseNetpostJsonTracking(payload);
-
-      logTracking(
-        'parsed-json',
-        safeCode,
-        JSON.stringify({
-          status: parsed.mailStatus,
-          latestTime: parsed.latestTime,
-          latestStatus: parsed.latestStatus,
-        })
-      );
-
-      if (
-        parsed.latestTime ||
-        parsed.latestStatus ||
-        url === NETPOST_TRACE_URLS[NETPOST_TRACE_URLS.length - 1]
-      ) {
-        return parsed;
-      }
-    } catch (error) {
-      lastError = error;
-      logTracking('json-error', safeCode, url, error?.message || error);
-    } finally {
-      clearTimeout(timeout);
-    }
-  }
-
-  throw lastError || new Error('Không thể kiểm tra Netpost.');
-}
-
-
-export async function fetchNetpostTracking(code) {
+export async function fetchNewpostTracking(code) {
   const safeCode = String(code || '').trim();
   if (!safeCode) throw new Error('Thiếu mã đi thư.');
 
-  const jsonResult = await fetchNetpostJsonTracking(safeCode).catch((error) => {
-    logTracking('json-fallback', safeCode, error?.message || error);
-    return null;
+  logTracking('checking', safeCode);
+
+  let latestStatus = 'Đang chuyển phát (Newpost)';
+  let latestTime = new Date().toLocaleString('vi-VN', {
+    timeZone: 'Asia/Ho_Chi_Minh',
   });
+  let isDelivered = false;
 
-  if (jsonResult?.latestTime || jsonResult?.latestStatus) {
-    return jsonResult;
-  }
-
-  let lastError = null;
-
-  for (const baseUrl of NETPOST_URLS) {
+  // 1. Check API Bill/find
+  try {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), CHECK_TIMEOUT_MS);
 
-    try {
-      const url = `${baseUrl}?hawbNo=${encodeURIComponent(safeCode)}`;
-      logTracking('fetch', safeCode, url);
-      const res = await fetch(url, {
-        signal: controller.signal,
-        headers: {
-          Accept:
-            'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-          Referer: baseUrl,
-          'User-Agent':
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124.0 Safari/537.36',
-        },
-      });
+    const res = await fetch(NEWPOST_API_FIND, {
+      method: 'POST',
+      signal: controller.signal,
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        'User-Agent':
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124.0 Safari/537.36',
+      },
+      body: JSON.stringify({
+        maVanDon: safeCode,
+        maNhanVien: '',
+        maDonVi: '',
+      }),
+    });
+    clearTimeout(timeout);
 
-      if (!res.ok) {
-        throw new Error(`Netpost HTTP ${res.status}`);
+    if (res.ok) {
+      const data = await res.json();
+      logTracking('api-find-res', safeCode, JSON.stringify(data));
+      if (data && data.objBill) {
+        const bill = data.objBill;
+        latestStatus =
+          bill.trangThai ||
+          bill.trang_thai ||
+          bill.status_name ||
+          bill.note ||
+          'Đang gửi thư';
+        if (bill.ngayNhan || bill.ngay_phat || bill.updated_at) {
+          latestTime = String(
+            bill.ngayNhan || bill.ngay_phat || bill.updated_at
+          );
+        }
+        if (isDeliveredStatus(latestStatus) || Number(bill.status) === 4) {
+          isDelivered = true;
+        }
+        return {
+          mailStatus: isDelivered ? 'Đã nhận thư' : 'Đang gửi thư',
+          latestTime,
+          latestStatus,
+        };
       }
-
-      const html = await res.text();
-      logTracking(
-        'html-debug',
-        safeCode,
-        JSON.stringify({
-          length: html.length,
-          hasTableId: html.includes('listTrackAndTrace'),
-          hasTrackingClass: html.includes('listTrackAndTraceClass'),
-          hasBorderBottom: /border-bottom/i.test(html),
-          snippet: getDebugSnippet(html),
-        })
-      );
-      logTracking('row-debug', safeCode, JSON.stringify(getRowDebug(html)));
-      logTracking(
-        'script-debug',
-        safeCode,
-        JSON.stringify({
-          ajax: getAround(html, '$.ajax'),
-          insertTime: getAround(html, 'INSERT_TIME_STRING'),
-          hawbNo: getAround(html, 'hawbNo'),
-        })
-      );
-
-      const parsed = parseNetpostTracking(html);
-      logTracking(
-        'parsed',
-        safeCode,
-        JSON.stringify({
-          status: parsed.mailStatus,
-          latestTime: parsed.latestTime,
-          latestStatus: parsed.latestStatus,
-        })
-      );
-      if (
-        parsed.latestTime ||
-        parsed.latestStatus ||
-        baseUrl === NETPOST_URLS[NETPOST_URLS.length - 1]
-      ) {
-        return parsed;
-      }
-    } catch (error) {
-      lastError = error;
-      logTracking('error', safeCode, baseUrl, error?.message || error);
-    } finally {
-      clearTimeout(timeout);
     }
+  } catch (err) {
+    logTracking('api-find-error', safeCode, err?.message || err);
   }
 
-  throw lastError || new Error('Không thể kiểm tra Netpost.');
+  // 2. Check API cmdKiemTraVanDonCapNhatTenNguoiNhan
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), CHECK_TIMEOUT_MS);
+
+    const res = await fetch(NEWPOST_API_CHECK, {
+      method: 'POST',
+      signal: controller.signal,
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        'User-Agent':
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124.0 Safari/537.36',
+      },
+      body: JSON.stringify({
+        maVanDon: safeCode,
+        maNhanVien: '',
+        maDonVi: '',
+      }),
+    });
+    clearTimeout(timeout);
+
+    if (res.ok) {
+      const text = await res.text();
+      logTracking('api-check-res', safeCode, text);
+      let parsed = null;
+      try {
+        parsed = typeof text === 'string' ? JSON.parse(text) : text;
+        if (typeof parsed === 'string') parsed = JSON.parse(parsed);
+      } catch {}
+
+      if (parsed) {
+        if (parsed.status === '04' || parsed.status === 'success') {
+          isDelivered = true;
+          latestStatus = 'Đã giao thành công';
+        } else if (parsed.status) {
+          latestStatus = `Trạng thái: ${parsed.status}`;
+        }
+      }
+    }
+  } catch (err) {
+    logTracking('api-check-error', safeCode, err?.message || err);
+  }
+
+  // 3. Check web tracking HTML
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), CHECK_TIMEOUT_MS);
+
+    const url = `${NEWPOST_TRACKING_URL}?code=${encodeURIComponent(safeCode)}`;
+    const res = await fetch(url, {
+      signal: controller.signal,
+      headers: {
+        Accept:
+          'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'User-Agent':
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124.0 Safari/537.36',
+      },
+    });
+    clearTimeout(timeout);
+
+    if (res.ok) {
+      const html = await res.text();
+      if (isDeliveredStatus(html)) {
+        isDelivered = true;
+        latestStatus = 'Đã nhận thư';
+      }
+    }
+  } catch (err) {
+    logTracking('html-check-error', safeCode, err?.message || err);
+  }
+
+  return {
+    mailStatus: isDelivered ? 'Đã nhận thư' : 'Đang gửi thư',
+    latestTime,
+    latestStatus: isDelivered ? 'Giao thành công' : latestStatus,
+  };
 }
+
+// Alias for backwards compatibility
+export const fetchNetpostTracking = fetchNewpostTracking;
 
 export async function checkCaseMailTracking(caseId) {
   const current = await Case.findById(caseId).lean();
@@ -357,22 +204,23 @@ export async function checkCaseMailTracking(caseId) {
   const patch = { mailLastCheckedAt: now };
 
   try {
-    const result = await fetchNetpostTracking(current.mailTrackingCode);
+    const result = await fetchNewpostTracking(current.mailTrackingCode);
     Object.assign(patch, {
       mailStatus: result.mailStatus,
       mailLatestTime: result.latestTime,
       mailLatestStatus: result.latestStatus,
       mailLastCheckError: '',
     });
-
   } catch (error) {
-    patch.mailLastCheckError = error?.message || 'Không thể kiểm tra Netpost.';
+    patch.mailStatus = 'Đang gửi thư';
+    patch.mailLastCheckError = error?.message || 'Không thể kiểm tra Newpost.';
     logTracking('case-error', String(caseId), patch.mailLastCheckError);
   }
 
   const updated = await Case.findByIdAndUpdate(caseId, patch, {
     new: true,
   }).lean();
+
   logTracking(
     'saved-case',
     String(caseId),
@@ -383,6 +231,7 @@ export async function checkCaseMailTracking(caseId) {
       mailLastCheckError: updated?.mailLastCheckError,
     })
   );
+
   return updated;
 }
 
@@ -414,7 +263,11 @@ export async function runMailTrackingScan() {
 
   for (const item of items) {
     await checkCaseMailTracking(item._id).catch((error) => {
-      console.error('Netpost tracking failed:', item._id, error?.message || error);
+      console.error(
+        'Newpost tracking failed:',
+        item._id,
+        error?.message || error
+      );
     });
   }
 }

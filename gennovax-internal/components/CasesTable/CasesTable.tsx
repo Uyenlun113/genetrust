@@ -58,7 +58,7 @@ export default function CasesTable({
 
   const isAccountingAdmin = user?.role === "accounting_admin";
   const isAdminOrSuper = user?.role === "admin" || user?.role === "super_admin";
-  const colCount = 29 + (isAdminOrSuper ? 3 : 0) + (isAccountingAdmin ? 4 : 0);
+  const colCount = 27 + (isAdminOrSuper ? 3 : 0) + (isAccountingAdmin ? 4 : 0);
 
   const [historyModalOpen, setHistoryModalOpen] = useState(false);
   const [selectedCaseInfo, setSelectedCaseInfo] = useState<{
@@ -196,7 +196,7 @@ export default function CasesTable({
           className="min-h-0 flex-1 overflow-auto overscroll-contain bg-[linear-gradient(180deg,#f8fbff_0%,#eef6ff_36%,#ffffff_100%)] [scrollbar-color:#bae6fd_#f0f9ff] [&::-webkit-scrollbar]:h-[1px] [&::-webkit-scrollbar]:w-[4px] [&::-webkit-scrollbar-track]:bg-sky-50/90 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-sky-200 [&::-webkit-scrollbar-thumb]:border [&::-webkit-scrollbar-thumb]:border-solid [&::-webkit-scrollbar-thumb]:border-sky-50 [&::-webkit-scrollbar-thumb]:hover:bg-sky-300"
         >
           <table
-            className={`w-full table-fixed text-slate-900 ${isAccountingAdmin ? "min-w-[4000px]" : "min-w-[3450px]"}`}
+            className={`w-full table-fixed text-slate-900 ${isAccountingAdmin ? "min-w-[3800px]" : "min-w-[3250px]"}`}
           >
             <colgroup>
               <col className="w-[56px]" />  {/* 1. Pin / Select */}
@@ -224,9 +224,7 @@ export default function CasesTable({
               <col className="w-[120px]" /> {/* 23. Phân tích */}
               <col className="w-[90px]" />  {/* 24. Lưu trữ */}
               <col className="w-[90px]" />  {/* 25. GT nhận */}
-              <col className="w-[100px]" /> {/* 26. Trả file mềm */}
-              <col className="w-[100px]" /> {/* 27. Trả file cứng */}
-              <col className="w-[150px]" /> {/* 28. Số CCCD / Hộ chiếu */}
+              <col className="w-[150px]" /> {/* 26. Số CCCD / Hộ chiếu */}
               <col className="w-[110px]" /> {/* 29. Ngày cấp */}
               <col className="w-[140px]" /> {/* 30. Nơi cấp */}
               <col className="w-[180px]" /> {/* 31. Địa chỉ */}
@@ -395,13 +393,7 @@ export default function CasesTable({
                 {/* 23. GT nhận */}
                 <th className={`${thBase} bg-white/80 text-center`}>GT nhận</th>
 
-                {/* 24. Trả file mềm */}
-                <th className={`${thBase} bg-sky-50 text-center`}>Trả file mềm</th>
-
-                {/* 25. Trả file cứng */}
-                <th className={`${thBase} bg-white/80 text-center`}>Trả file cứng</th>
-
-                {/* 26. Số CCCD / Hộ chiếu */}
+                {/* 24. Số CCCD / Hộ chiếu */}
                 <th className={`${thBase} bg-sky-50`}>Số CCCD / Hộ chiếu</th>
 
                 {/* 27. Ngày cấp */}

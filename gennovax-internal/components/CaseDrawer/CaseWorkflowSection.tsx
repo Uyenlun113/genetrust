@@ -18,6 +18,7 @@ export default function CaseWorkflowSection({
   mailTrackingCode,
   mailTrackingLocked,
   hasNetpostData,
+  hasNewpostData = hasNetpostData,
   mailActionLoading,
   handleCheckMailTracking,
   runMailTrackingAction,
@@ -27,7 +28,8 @@ export default function CaseWorkflowSection({
   opt: (key: string) => { label: string; value: string }[];
   mailTrackingCode: string;
   mailTrackingLocked: boolean;
-  hasNetpostData: boolean;
+  hasNetpostData?: boolean;
+  hasNewpostData?: boolean;
   mailActionLoading: boolean;
   handleCheckMailTracking: () => void;
   runMailTrackingAction: (action: "start" | "check" | "stop") => Promise<void>;
@@ -301,7 +303,7 @@ export default function CaseWorkflowSection({
               </div>
               {(form.mailLastCheckedAt || form.mailLastCheckError) && (
                 <div className="mt-2 rounded-xl bg-white/80 px-3 py-2 text-[13px] leading-5 text-sky-700 ring-1 ring-sky-100">
-                  {hasNetpostData ? (
+                  {hasNewpostData ? (
                     <>
                       <div>
                         Thời gian:{" "}
@@ -315,7 +317,7 @@ export default function CaseWorkflowSection({
                     </>
                   ) : (
                     <div className="font-semibold text-slate-500">
-                      Không có dữ liệu Netpost.
+                      Không có dữ liệu Newpost.
                     </div>
                   )}
                   {form.mailLastCheckError && (

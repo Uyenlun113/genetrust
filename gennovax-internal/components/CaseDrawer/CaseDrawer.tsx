@@ -17,6 +17,7 @@ import {
   addHoursISO,
   cn,
   fmtMoney,
+  getInvoicePresetBySource,
   parseMoneyInput,
 } from "./shared";
 
@@ -232,6 +233,7 @@ export default function CaseDrawer({
 
   const handleSourceChange = (sourceName: string) => {
     const doctor = doctors.find((d) => d.fullName === sourceName) ?? null;
+    const invoicePreset = getInvoicePresetBySource(sourceName);
 
     patchForm({
       source: sourceName,
@@ -242,6 +244,7 @@ export default function CaseDrawer({
       serviceId: null,
       agentTierLabel: doctor?.agentTierLabel || "",
       costPrice: 0,
+      ...(invoicePreset ? invoicePreset : {}),
     });
 
     setCollectedAmountManual(false);
@@ -401,18 +404,26 @@ export default function CaseDrawer({
     : [];
   const mailTrackingCode = String(form.mailTrackingCode || "").trim();
   const mailTrackingLocked = !!form.mailTrackingEnabled;
-  const hasNetpostData = !!(form.mailLatestTime || form.mailLatestStatus);
+  const hasNewpostData = !!(form.mailLatestTime || form.mailLatestStatus);
 
-  const handleCheckMailTracking = () => {
+  const handleCheckMailTracking = async () => {
     if (!mailTrackingCode) return;
 
     window.open(
-      `https://netpost.vn/Home/tra_cuu_van_don?hawbNo=${encodeURIComponent(
+      `https://newpost.vn/tracking?code=${encodeURIComponent(
         mailTrackingCode,
       )}`,
       "_blank",
       "noopener,noreferrer",
     );
+
+    if (form._id) {
+      await runMailTrackingAction("check");
+    } else {
+      if (!form.mailStatus || form.mailStatus === "Chưa gửi thư") {
+        patchForm({ mailStatus: "Đang gửi thư" });
+      }
+    }
   };
 
   const runMailTrackingAction = async (
@@ -495,7 +506,7 @@ export default function CaseDrawer({
                 opt={opt}
                 mailTrackingCode={mailTrackingCode}
                 mailTrackingLocked={mailTrackingLocked}
-                hasNetpostData={hasNetpostData}
+                hasNewpostData={hasNewpostData}
                 mailActionLoading={mailActionLoading}
                 handleCheckMailTracking={handleCheckMailTracking}
                 runMailTrackingAction={runMailTrackingAction}

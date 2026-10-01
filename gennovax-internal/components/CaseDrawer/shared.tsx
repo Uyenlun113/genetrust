@@ -310,3 +310,45 @@ export function isoDateTimeFromISODate(date: string) {
   if (!date) return null;
   return new Date(`${date}T00:00:00+07:00`).toISOString();
 }
+
+export const INVOICE_PRESETS = {
+  OH: {
+    invoiceType: "company" as const,
+    invoiceName: "CÔNG TY CỔ PHẦN OPEN HEALTHCARE VIỆT NAM",
+    invoiceTaxCode: "0109189138",
+    invoiceAddress:
+      "Số 7 - Dãy 6 khu gian dân Yên Phúc, Tổ 5, Phường Hà Đông, Thành phố Hà Nội, Việt Nam",
+  },
+  NGA_TU_HO: {
+    invoiceType: "company" as const,
+    invoiceName: "Công ty TNHH Y tế Thành Bắc",
+    invoiceTaxCode: "2300934740",
+    invoiceAddress: "Số 5 khu phố Bến Hồ, Thuận Thành, Bắc Ninh",
+  },
+};
+
+export function getInvoicePresetBySource(sourceName?: string | null) {
+  if (!sourceName) return null;
+  const s = sourceName.trim().toLowerCase();
+  if (
+    s === "oh" ||
+    s.includes("open healthcare") ||
+    s.startsWith("oh ") ||
+    s.endsWith(" oh") ||
+    s === "pk oh"
+  ) {
+    return INVOICE_PRESETS.OH;
+  }
+  if (
+    s.includes("ngã tư hồ") ||
+    s.includes("ngã 4 hồ") ||
+    s.includes("nga tu ho") ||
+    s.includes("nga 4 ho") ||
+    s.includes("bvdk ngã 4 hồ") ||
+    s.includes("bvdk ngã tư hồ")
+  ) {
+    return INVOICE_PRESETS.NGA_TU_HO;
+  }
+  return null;
+}
+

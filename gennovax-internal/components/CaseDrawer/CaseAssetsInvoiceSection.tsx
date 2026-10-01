@@ -6,6 +6,7 @@ import type { CaseDraft } from "@/lib/types";
 import {
   cn,
   Field,
+  INVOICE_PRESETS,
   Input,
   isoDateFromISODateTime,
   isoDateTimeFromISODate,
@@ -55,9 +56,29 @@ export default function CaseAssetsInvoiceSection({
 
       <div className="space-y-4">
         <div className="rounded-[24px] bg-sky-50/45 p-4 ring-1 ring-sky-100">
-          <div className="mb-3 flex items-center justify-between">
-            <div className="text-[12px] font-bold text-neutral-900">
-              Thông tin xuất hóa đơn
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <span className="text-[12px] font-bold text-neutral-900">
+                Thông tin xuất hóa đơn
+              </span>
+              <div className="flex items-center gap-1">
+                <button
+                  type="button"
+                  onClick={() => patchForm(INVOICE_PRESETS.OH as any)}
+                  className="rounded-lg border border-sky-200 bg-white px-2 py-0.5 text-[10px] font-bold text-sky-700 shadow-xs transition hover:bg-sky-100"
+                  title="Điền tự động thông tin xuất hóa đơn OH"
+                >
+                  Mẫu OH
+                </button>
+                <button
+                  type="button"
+                  onClick={() => patchForm(INVOICE_PRESETS.NGA_TU_HO as any)}
+                  className="rounded-lg border border-sky-200 bg-white px-2 py-0.5 text-[10px] font-bold text-sky-700 shadow-xs transition hover:bg-sky-100"
+                  title="Điền tự động thông tin xuất hóa đơn Ngã Tư Hồ"
+                >
+                  Mẫu Ngã Tư Hồ
+                </button>
+              </div>
             </div>
 
             <div className="flex items-center gap-1 rounded-xl bg-white/90 p-1 ring-1 ring-sky-100">
